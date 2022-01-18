@@ -48,7 +48,7 @@ public class Duke {
     private final static String LIST_COMMAND = "list";
     /* END CONSTANTS */
 
-    private final static List<String> userCommands = new ArrayList<>(100);
+    private final static List<String> tasks = new ArrayList<>(100);
 
     /* HELPER FUNCTIONS */
     private static String wrapStringRed(String out) {
@@ -81,18 +81,18 @@ public class Duke {
                 "　　ﾟ　　　.　　　. ,　　　　.　 .");
     }
 
-    private static String awaitCommandFromUser(Scanner sc) {
+    private static String awaitInputFromUser(Scanner sc) {
         System.out.print(MESSAGE_BUFFER + " >>> " + SMILEY_LOGO + " YOU > ");
         return sc.nextLine();
     }
 
-    private static void storeUserCommand(String command) {
-        userCommands.add(command);
+    private static void addTask(String task) {
+        tasks.add(task);
     }
 
-    private static void listUserCommands() {
-        for (int i = 0; i < userCommands.size(); i++) {
-            printFromRed((i + 1) + ". " + userCommands.get(i));
+    private static void listTasks() {
+        for (int i = 0; i < tasks.size(); i++) {
+            printFromRed((i + 1) + ". " + tasks.get(i));
         }
         System.out.println();
     }
@@ -102,17 +102,17 @@ public class Duke {
 
         printGreeting();
         while (true) {
-            String userInput = awaitCommandFromUser(sc);
+            String userInput = awaitInputFromUser(sc);
             if (userInput.equalsIgnoreCase(EXIT_COMMAND)) {
                 printExitMessage();
                 break;
             }
             if (userInput.equalsIgnoreCase(LIST_COMMAND)) {
-                listUserCommands();
+                listTasks();
                 continue;
             }
-            storeUserCommand(userInput);
-            printFromRed("added: " + userInput + "\n");
+            addTask(userInput);
+            printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
         }
         sc.close();
     }
