@@ -47,6 +47,8 @@ public class Duke {
 
     private final static String EXIT_COMMAND = "bye";
     private final static String LIST_COMMAND = "list";
+    private final static String MARK_COMMAND = "mark";
+    private final static String UNMARK_COMMAND = "unmark";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -57,6 +59,7 @@ public class Duke {
     }
     /* END HELPER FUNCTIONS */
 
+    /* IO FUNCTIONS */
     private static void printGreeting() {
         System.out.println(GREETING_MESSAGE);
     }
@@ -87,12 +90,7 @@ public class Duke {
         return sc.nextLine();
     }
 
-    private static void addTask(String taskName) {
-        tasks.add(new UserTask(taskName));
-    }
-
     private static void listTasks() {
-        printFromRed("Alright, here are your recorded tasks.");
         System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
         System.out.println(colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.size()));
         System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
@@ -101,27 +99,62 @@ public class Duke {
         }
         System.out.println();
     }
+    /* END IO FUNCTIONS */
+
+    /* USER TASKS FUNCTIONS */
+    private static void addTask(String taskName) {
+        tasks.add(new UserTask(taskName));
+    }
+
+    /**
+     * Takes in the 1-count index of the task, adjusts it for 0-count to retrieve
+     * from the tasks ArrayList.
+     *
+     * @param number 1-count
+     * @return UserTask based on 0-indexing of the ArrayList
+     */
+    private static UserTask getTaskOfNumber(int number) {
+        return tasks.get(number - 1);
+    }
+    /* END USER TASKS FUNCTIONS */
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         printGreeting();
+
         boolean isRunning = true;
         while (isRunning) {
             String userInput = awaitInputFromUser(sc);
-            switch (userInput.toLowerCase(Locale.ROOT)) {
+            String[] userInputSplit = userInput.split("\\s+");
+            String userCommand = userInputSplit[0];
+            switch (userCommand.toLowerCase(Locale.ROOT)) {
                 case EXIT_COMMAND:
-                    printExitMessage();
                     isRunning = false;
                     break;
                 case LIST_COMMAND:
+                    printFromRed("Alright, here are your recorded tasks.");
                     listTasks();
+                    break;
+                case MARK_COMMAND:
+                    UserTask task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
+                    task.setDone();
+                    printFromRed("Good job! Let's keep it going, this spaceship needs you!");
+                    printFromRed(task + "\n");
+                    break;
+                case UNMARK_COMMAND:
+                    task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
+                    task.setUndone();
+                    printFromRed("I thought you were done with it?");
+                    printFromRed(task + "\n");
                     break;
                 default:
                     addTask(userInput);
                     printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
             }
         }
+
+        printExitMessage();
         sc.close();
     }
 }
