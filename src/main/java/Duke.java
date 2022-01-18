@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Duke {
@@ -105,18 +106,21 @@ public class Duke {
         Scanner sc = new Scanner(System.in);
 
         printGreeting();
-        while (true) {
+        boolean isRunning = true;
+        while (isRunning) {
             String userInput = awaitInputFromUser(sc);
-            if (userInput.equalsIgnoreCase(EXIT_COMMAND)) {
-                printExitMessage();
-                break;
+            switch (userInput.toLowerCase(Locale.ROOT)) {
+                case EXIT_COMMAND:
+                    printExitMessage();
+                    isRunning = false;
+                    break;
+                case LIST_COMMAND:
+                    listTasks();
+                    break;
+                default:
+                    addTask(userInput);
+                    printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
             }
-            if (userInput.equalsIgnoreCase(LIST_COMMAND)) {
-                listTasks();
-                continue;
-            }
-            addTask(userInput);
-            printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
         }
         sc.close();
     }
