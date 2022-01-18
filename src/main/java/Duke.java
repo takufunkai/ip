@@ -10,13 +10,13 @@ public class Duke {
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_RESET = "\u001B[0m";
 
-    private final static String MESSAGE_BUFFER = "                 ";
+    private final static String MESSAGE_BUFFER = "                  ";
     private final static String DIVIDER =
             " ---------------  ---------------  ---------------  ---------------  --------------- \n" +
                     " -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::- \n" +
                     " ---------------  ---------------  ---------------  ---------------  --------------- \n";
     private final static String GREETING_MESSAGE =
-            wrapStringRed(
+            colourStringRed(
                     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n" +
@@ -48,10 +48,10 @@ public class Duke {
     private final static String LIST_COMMAND = "list";
     /* END CONSTANTS */
 
-    private final static List<String> tasks = new ArrayList<>(100);
+    private final static List<UserTask> tasks = new ArrayList<>(100);
 
     /* HELPER FUNCTIONS */
-    private static String wrapStringRed(String out) {
+    private static String colourStringRed(String out) {
         return ANSI_RED + out + ANSI_RESET;
     }
     /* END HELPER FUNCTIONS */
@@ -61,8 +61,8 @@ public class Duke {
     }
 
     private static void printFromRed(String message) {
-        String redMessageSuffix = MESSAGE_BUFFER + " >>> " + CREW_MATE_LOGO + " > ";
-        System.out.println(wrapStringRed(redMessageSuffix + message));
+        String redMessageSuffix = MESSAGE_BUFFER + ">>> " + CREW_MATE_LOGO + " > ";
+        System.out.println(colourStringRed(redMessageSuffix + message));
     }
 
     private static void printExitMessage() {
@@ -72,7 +72,7 @@ public class Duke {
                 "\n" +
                 "　　　.　　　 　　.　　　　　。　　 。　. 　\n" +
                 "\n" +
-                ".　　 。　　　　　 " + wrapStringRed(CREW_MATE_LOGO) + " 。 . 　　 • 　　　　•\n" +
+                ".　　 。　　　　　 " + colourStringRed(CREW_MATE_LOGO) + " 。 . 　　 • 　　　　•\n" +
                 "\n" +
                 "　　ﾟ　　 Red was not An Impostor.　 。　.\n" +
                 "\n" +
@@ -82,17 +82,21 @@ public class Duke {
     }
 
     private static String awaitInputFromUser(Scanner sc) {
-        System.out.print(MESSAGE_BUFFER + " >>> " + SMILEY_LOGO + " YOU > ");
+        System.out.print(MESSAGE_BUFFER + ">>> " + SMILEY_LOGO + " YOU > ");
         return sc.nextLine();
     }
 
-    private static void addTask(String task) {
-        tasks.add(task);
+    private static void addTask(String taskName) {
+        tasks.add(new UserTask(taskName));
     }
 
     private static void listTasks() {
+        printFromRed("Alright, here are your recorded tasks.");
+        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
+        System.out.println(colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.size()));
+        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
         for (int i = 0; i < tasks.size(); i++) {
-            printFromRed((i + 1) + ". " + tasks.get(i));
+            System.out.println(MESSAGE_BUFFER + colourStringRed((i + 1) + ". " + tasks.get(i).toString()));
         }
         System.out.println();
     }
