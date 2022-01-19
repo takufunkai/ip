@@ -9,6 +9,8 @@ list
 unmark 1
 mark 2
 list
+delete 3
+list
 START ERROR HANDLING HERE
 
 random
@@ -38,4 +40,9 @@ unmark 0
 unmark
 unmark NaN
 unmark .
+delete 10
+delete 0
+delete
+delete NaN
+delete .
 bye
