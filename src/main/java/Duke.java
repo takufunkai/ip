@@ -1,3 +1,4 @@
+import usertask.Deadline;
 import usertask.ToDo;
 import usertask.UserTask;
 
@@ -53,6 +54,7 @@ public class Duke {
     private final static String MARK_COMMAND = "mark";
     private final static String UNMARK_COMMAND = "unmark";
     private final static String ADD_TODO_COMMAND = "todo";
+    private final static String ADD_DEADLINE_COMMAND = "deadline";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -130,7 +132,6 @@ public class Duke {
             String userInput = awaitInputFromUser(sc);
             String[] userInputSplit = userInput.split("\\s+", 2);
             String userCommand = userInputSplit[0];
-            String userArguments = userInputSplit[1];
             switch (userCommand.toLowerCase(Locale.ROOT)) {
                 case EXIT_COMMAND:
                     isRunning = false;
@@ -140,23 +141,30 @@ public class Duke {
                     listTasks();
                     break;
                 case MARK_COMMAND:
-                    UserTask task = getTaskOfNumber(Integer.parseInt(userArguments));
+                    UserTask task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
                     task.setDone();
                     printFromRed("Good job! Let's keep it going, this spaceship needs you!");
                     printFromRed(task + "\n");
                     break;
                 case UNMARK_COMMAND:
-                    task = getTaskOfNumber(Integer.parseInt(userArguments));
+                    task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
                     task.setUndone();
                     printFromRed("I thought you were done with it?");
                     printFromRed(task + "\n");
                     break;
                 case ADD_TODO_COMMAND:
-                    printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
-                    tasks.add(new ToDo(userArguments));
+                    UserTask newToDo = new ToDo(userInputSplit[1]);
+                    tasks.add(newToDo);
+                    printFromRed("Added task #" + (tasks.size()) + ": " + newToDo + "\n");
+                    break;
+                case ADD_DEADLINE_COMMAND:
+                    String[] parsedArguments = userInputSplit[1].split(" /by ");
+                    UserTask newDeadline = new Deadline(parsedArguments[0], parsedArguments[1]);
+                    tasks.add(newDeadline);
+                    printFromRed("Added task #" + (tasks.size()) + ": " + newDeadline + "\n");
                     break;
                 default:
-                    System.out.println("Unknown command, try again?");
+                    printFromRed("Unknown command, try again?");
             }
         }
 
