@@ -18,9 +18,9 @@ public class Duke {
 
     private final static String MESSAGE_BUFFER = "                  ";
     private final static String DIVIDER =
-            " ---------------  ---------------  ---------------  ---------------  --------------- \n" +
-                    " -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::- \n" +
-                    " ---------------  ---------------  ---------------  ---------------  --------------- \n";
+            " ---------------  ---------------  ---------------  ---------------  ---------------\n" +
+                    " -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-\n" +
+                    " ---------------  ---------------  ---------------  ---------------  ---------------\n";
     private final static String GREETING_MESSAGE =
             colourStringRed(
                     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
@@ -60,6 +60,7 @@ public class Duke {
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
+    private static boolean isRunning = true;
 
     /* HELPER FUNCTIONS */
     private static String colourStringRed(String out) {
@@ -79,6 +80,7 @@ public class Duke {
 
     private static void printExitMessage() {
         printFromRed("Thank you for chatting with me... bye forever");
+        System.out.println();
         System.out.println(DIVIDER +
                 ". 　　　。　　　　•　 　ﾟ　　。 　　.\n" +
                 "\n" +
@@ -99,13 +101,14 @@ public class Duke {
     }
 
     private static void listTasks() {
-        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
+        String tableDivider = colourStringRed(MESSAGE_BUFFER + "----------------");
+        System.out.println(tableDivider);
         System.out.println(colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.size()));
-        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
+        System.out.println(tableDivider);
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(MESSAGE_BUFFER + colourStringRed((i + 1) + ". " + tasks.get(i).toString()));
         }
-        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
+        System.out.println(tableDivider);
         System.out.println();
     }
     /* END IO FUNCTIONS */
@@ -127,56 +130,131 @@ public class Duke {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        printGreeting();
+        Duke.printGreeting();
 
-        boolean isRunning = true;
-        while (isRunning) {
-            String userInput = awaitInputFromUser(sc);
+        while (Duke.isRunning) {
+            String userInput = Duke.awaitInputFromUser(sc);
             String[] userInputSplit = userInput.split("\\s+", 2);
             String userCommand = userInputSplit[0];
-            switch (userCommand.toLowerCase(Locale.ROOT)) {
-                case EXIT_COMMAND:
-                    isRunning = false;
-                    break;
-                case LIST_COMMAND:
-                    printFromRed("Alright, here are your recorded tasks.");
-                    listTasks();
-                    break;
-                case MARK_COMMAND:
-                    UserTask task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
-                    task.setDone();
-                    printFromRed("Good job! Let's keep it going, this spaceship needs you!");
-                    printFromRed(task + "\n");
-                    break;
-                case UNMARK_COMMAND:
-                    task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
-                    task.setUndone();
-                    printFromRed("I thought you were done with it?");
-                    printFromRed(task + "\n");
-                    break;
-                case ADD_TODO_COMMAND:
-                    UserTask newToDo = new ToDo(userInputSplit[1]);
-                    tasks.add(newToDo);
-                    printFromRed("Added task #" + (tasks.size()) + ": " + newToDo + "\n");
-                    break;
-                case ADD_DEADLINE_COMMAND:
-                    String[] parsedArguments = userInputSplit[1].split(" /by ");
-                    UserTask newDeadline = new Deadline(parsedArguments[0], parsedArguments[1]);
-                    tasks.add(newDeadline);
-                    printFromRed("Added task #" + (tasks.size()) + ": " + newDeadline + "\n");
-                    break;
-                case ADD_EVENT_COMMAND:
-                    parsedArguments = userInputSplit[1].split(" /at ");
-                    UserTask newEvent = new Event(parsedArguments[0], parsedArguments[1]);
-                    tasks.add(newEvent);
-                    printFromRed("Added task #" + (tasks.size()) + ": " + newEvent + "\n");
-                    break;
-                default:
-                    printFromRed("Unknown command, try again?");
+            String userArgument = null;
+            if (userInputSplit.length == 2) {
+                userArgument = userInputSplit[1];
+            }
+            try {
+                switch (userCommand.toLowerCase(Locale.ROOT)) {
+                    case EXIT_COMMAND:
+                        Duke.isRunning = false;
+                        break;
+                    case LIST_COMMAND:
+                        Duke.printFromRed("Alright, here are your recorded tasks.");
+                        if (Duke.tasks.size() == 0) {
+                            Duke.printFromRed("It seems you have no tasks at the moment, why not add one?");
+                        }
+                        Duke.listTasks();
+                        break;
+                    case MARK_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("Please indicate a task item number to mark.");
+                        }
+                        int taskNumber;
+                        try {
+                            taskNumber = Integer.parseInt(userArgument);
+                        } catch (NumberFormatException e) {
+                            throw new DukeException("Your tasks are identified by numbers! " +
+                                    "Please input a valid number.");
+                        }
+                        if (taskNumber > Duke.tasks.size()) {
+                            throw new DukeException("There are currently " + Duke.tasks.size() + " tasks. " +
+                                    "Please enter a valid number to mark");
+                        }
+                        if (taskNumber <= 0) {
+                            throw new DukeException("Are you trying to be funny?");
+                        }
+                        UserTask task = Duke.getTaskOfNumber(taskNumber);
+                        task.setDone();
+                        Duke.printFromRed("Good job! Let's keep it going, this spaceship needs you!");
+                        Duke.printFromRed(task + "\n");
+                        break;
+                    case UNMARK_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("Please indicate a task item number to unmark.");
+                        }
+                        try {
+                            taskNumber = Integer.parseInt(userArgument);
+                        } catch (NumberFormatException e) {
+                            throw new DukeException("Your tasks are identified by numbers! " +
+                                    "Please input a valid number.");
+                        }
+                        if (taskNumber > Duke.tasks.size()) {
+                            throw new DukeException("There are currently " + Duke.tasks.size() + " tasks. " +
+                                    "Please enter a valid number to unmark");
+                        }
+                        if (taskNumber <= 0) {
+                            throw new DukeException("Are you trying to be funny?");
+                        }
+                        task = Duke.getTaskOfNumber(taskNumber);
+                        task.setUndone();
+                        Duke.printFromRed("I thought you were done with it?");
+                        Duke.printFromRed(task + "\n");
+                        break;
+                    case ADD_TODO_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("ToDo items must have a description.");
+                        }
+                        UserTask newToDo = new ToDo(userArgument);
+                        tasks.add(newToDo);
+                        Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newToDo + "\n");
+                        break;
+                    case ADD_DEADLINE_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("Deadline items must have a description and due date.\n");
+                        }
+                        String[] parsedArguments = userArgument.split(" /by ");
+                        if (parsedArguments.length < 2) {
+                            throw new DukeException("Deadline items must have a description and a due date.\n");
+                        }
+                        String taskName = parsedArguments[0];
+                        String date = parsedArguments[1];
+                        if (taskName.isBlank()) {
+                            throw new DukeException("Deadline items must have a description.");
+                        }
+                        if (date.isBlank()) {
+                            throw new DukeException("Deadline items must have a due date.");
+                        }
+                        UserTask newDeadline = new Deadline(taskName, date);
+                        tasks.add(newDeadline);
+                        Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newDeadline + "\n");
+                        break;
+                    case ADD_EVENT_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("Event items must have a description and a date.\n");
+                        }
+                        parsedArguments = userInputSplit[1].split(" /at ");
+                        if (parsedArguments.length < 2) {
+                            throw new DukeException("Event items must have a description and a date.\n");
+                        }
+                        taskName = parsedArguments[0];
+                        date = parsedArguments[1];
+                        if (taskName.isBlank()) {
+                            throw new DukeException("Event items must have a description.");
+                        }
+                        if (date.isBlank()) {
+                            throw new DukeException("Event items must have a date.");
+                        }
+                        UserTask newEvent = new Event(taskName, date);
+                        tasks.add(newEvent);
+                        Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newEvent + "\n");
+                        break;
+                    default:
+                        throw new DukeException("Unknown command.");
+                }
+            } catch (DukeException e) {
+                Duke.printFromRed("Oops, something went wrong: ");
+                Duke.printFromRed("** " + e.getMessage() + "\n");
             }
         }
 
-        printExitMessage();
+        Duke.printExitMessage();
         sc.close();
     }
 }
