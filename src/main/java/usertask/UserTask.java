@@ -1,8 +1,10 @@
-public class UserTask {
+package usertask;
+
+public abstract class UserTask {
     private final String name;
     private boolean isDone;
 
-    public UserTask(String name) {
+    UserTask(String name) {
         this.name = name;
         this.isDone = false;
     }

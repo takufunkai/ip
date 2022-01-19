@@ -1,3 +1,6 @@
+import usertask.ToDo;
+import usertask.UserTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +52,7 @@ public class Duke {
     private final static String LIST_COMMAND = "list";
     private final static String MARK_COMMAND = "mark";
     private final static String UNMARK_COMMAND = "unmark";
+    private final static String ADD_TODO_COMMAND = "todo";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -97,21 +101,19 @@ public class Duke {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(MESSAGE_BUFFER + colourStringRed((i + 1) + ". " + tasks.get(i).toString()));
         }
+        System.out.println(colourStringRed(MESSAGE_BUFFER + "----------------"));
         System.out.println();
     }
     /* END IO FUNCTIONS */
 
     /* USER TASKS FUNCTIONS */
-    private static void addTask(String taskName) {
-        tasks.add(new UserTask(taskName));
-    }
 
     /**
-     * Takes in the 1-count index of the task, adjusts it for 0-count to retrieve
+     * Takes in the 1-index of the task, adjusts it for 0-indexing to retrieve
      * from the tasks ArrayList.
      *
-     * @param number 1-count
-     * @return UserTask based on 0-indexing of the ArrayList
+     * @param number 1-index
+     * @return userTask.UserTask based on 0-indexing of the ArrayList
      */
     private static UserTask getTaskOfNumber(int number) {
         return tasks.get(number - 1);
@@ -126,8 +128,9 @@ public class Duke {
         boolean isRunning = true;
         while (isRunning) {
             String userInput = awaitInputFromUser(sc);
-            String[] userInputSplit = userInput.split("\\s+");
+            String[] userInputSplit = userInput.split("\\s+", 2);
             String userCommand = userInputSplit[0];
+            String userArguments = userInputSplit[1];
             switch (userCommand.toLowerCase(Locale.ROOT)) {
                 case EXIT_COMMAND:
                     isRunning = false;
@@ -137,20 +140,23 @@ public class Duke {
                     listTasks();
                     break;
                 case MARK_COMMAND:
-                    UserTask task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
+                    UserTask task = getTaskOfNumber(Integer.parseInt(userArguments));
                     task.setDone();
                     printFromRed("Good job! Let's keep it going, this spaceship needs you!");
                     printFromRed(task + "\n");
                     break;
                 case UNMARK_COMMAND:
-                    task = getTaskOfNumber(Integer.parseInt(userInputSplit[1]));
+                    task = getTaskOfNumber(Integer.parseInt(userArguments));
                     task.setUndone();
                     printFromRed("I thought you were done with it?");
                     printFromRed(task + "\n");
                     break;
-                default:
-                    addTask(userInput);
+                case ADD_TODO_COMMAND:
                     printFromRed("Added task #" + (tasks.size()) + ": " + userInput + "\n");
+                    tasks.add(new ToDo(userArguments));
+                    break;
+                default:
+                    System.out.println("Unknown command, try again?");
             }
         }
 
