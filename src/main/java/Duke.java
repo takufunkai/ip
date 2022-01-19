@@ -11,11 +11,6 @@ import java.util.Scanner;
 public class Duke {
     /* CONSTANTS */
     private final static String CREW_MATE_LOGO = "ඞ";
-    private final static String SMILEY_LOGO = "☺";
-
-    private static final String ANSI_RED = "\u001B[31m";
-    private static final String ANSI_RESET = "\u001B[0m";
-
     private final static String MESSAGE_BUFFER = "                  ";
     private final static String DIVIDER =
             " ---------------  ---------------  ---------------  ---------------  ---------------\n" +
@@ -57,6 +52,7 @@ public class Duke {
     private final static String ADD_TODO_COMMAND = "todo";
     private final static String ADD_DEADLINE_COMMAND = "deadline";
     private final static String ADD_EVENT_COMMAND = "event";
+    private final static String DELETE_COMMAND = "delete";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -64,6 +60,8 @@ public class Duke {
 
     /* HELPER FUNCTIONS */
     private static String colourStringRed(String out) {
+        String ANSI_RED = "\u001B[31m";
+        String ANSI_RESET = "\u001B[0m";
         return ANSI_RED + out + ANSI_RESET;
     }
     /* END HELPER FUNCTIONS */
@@ -96,7 +94,7 @@ public class Duke {
     }
 
     private static String awaitInputFromUser(Scanner sc) {
-        System.out.print(MESSAGE_BUFFER + ">>> " + SMILEY_LOGO + " YOU > ");
+        System.out.print(MESSAGE_BUFFER + ">>> ☺ YOU > ");
         return sc.nextLine();
     }
 
@@ -124,6 +122,10 @@ public class Duke {
      */
     private static UserTask getTaskOfNumber(int number) {
         return tasks.get(number - 1);
+    }
+
+    private static UserTask deleteTaskOfNumber(int number) {
+        return tasks.remove(number - 1);
     }
     /* END USER TASKS FUNCTIONS */
 
@@ -244,6 +246,27 @@ public class Duke {
                         UserTask newEvent = new Event(taskName, date);
                         tasks.add(newEvent);
                         Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newEvent + "\n");
+                        break;
+                    case DELETE_COMMAND:
+                        if (userArgument == null || userArgument.isBlank()) {
+                            throw new DukeException("Please indicate a task item number to delete.");
+                        }
+                        try {
+                            taskNumber = Integer.parseInt(userArgument);
+                        } catch (NumberFormatException e) {
+                            throw new DukeException("Your tasks are identified by numbers! " +
+                                    "Please input a valid number.");
+                        }
+                        if (taskNumber > Duke.tasks.size()) {
+                            throw new DukeException("There are currently " + Duke.tasks.size() + " tasks. " +
+                                    "Please enter a valid number to delete.");
+                        }
+                        if (taskNumber <= 0) {
+                            throw new DukeException("Are you trying to be funny?");
+                        }
+                        UserTask deletedTask = Duke.deleteTaskOfNumber(taskNumber);
+                        Duke.printFromRed("Alright! Getting rid of the following task: ");
+                        Duke.printFromRed(deletedTask + "\n");
                         break;
                     default:
                         throw new DukeException("Unknown command.");
