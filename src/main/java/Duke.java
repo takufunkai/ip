@@ -9,6 +9,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Duke {
+    enum Command {
+        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, BYE
+    }
+
     /* CONSTANTS */
     private final static String CREW_MATE_LOGO = "ඞ";
     private final static String MESSAGE_BUFFER = "                  ";
@@ -44,15 +48,6 @@ public class Duke {
                             "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n") +
                     DIVIDER;
-
-    private final static String EXIT_COMMAND = "bye";
-    private final static String LIST_COMMAND = "list";
-    private final static String MARK_COMMAND = "mark";
-    private final static String UNMARK_COMMAND = "unmark";
-    private final static String ADD_TODO_COMMAND = "todo";
-    private final static String ADD_DEADLINE_COMMAND = "deadline";
-    private final static String ADD_EVENT_COMMAND = "event";
-    private final static String DELETE_COMMAND = "delete";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -135,26 +130,34 @@ public class Duke {
         Duke.printGreeting();
 
         while (Duke.isRunning) {
-            String userInput = Duke.awaitInputFromUser(sc);
-            String[] userInputSplit = userInput.split("\\s+", 2);
-            String userCommand = userInputSplit[0];
-            String userArgument = null;
-            if (userInputSplit.length == 2) {
-                userArgument = userInputSplit[1];
-            }
             try {
-                switch (userCommand.toLowerCase(Locale.ROOT)) {
-                    case EXIT_COMMAND:
+                String userInput = Duke.awaitInputFromUser(sc);
+                String[] userInputSplit = userInput.split("\\s+", 2);
+
+                Command userCommand;
+                try {
+                    userCommand = Command.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
+                } catch (IllegalArgumentException e) {
+                    throw new DukeException("Unknown command.");
+                }
+
+                String userArgument = null;
+                if (userInputSplit.length == 2) {
+                    userArgument = userInputSplit[1];
+                }
+
+                switch (userCommand) {
+                    case BYE:
                         Duke.isRunning = false;
                         break;
-                    case LIST_COMMAND:
+                    case LIST:
                         Duke.printFromRed("Alright, here are your recorded tasks.");
                         if (Duke.tasks.size() == 0) {
                             Duke.printFromRed("It seems you have no tasks at the moment, why not add one?");
                         }
                         Duke.listTasks();
                         break;
-                    case MARK_COMMAND:
+                    case MARK:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("Please indicate a task item number to mark.");
                         }
@@ -177,7 +180,7 @@ public class Duke {
                         Duke.printFromRed("Good job! Let's keep it going, this spaceship needs you!");
                         Duke.printFromRed(task + "\n");
                         break;
-                    case UNMARK_COMMAND:
+                    case UNMARK:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("Please indicate a task item number to unmark.");
                         }
@@ -199,7 +202,7 @@ public class Duke {
                         Duke.printFromRed("I thought you were done with it?");
                         Duke.printFromRed(task + "\n");
                         break;
-                    case ADD_TODO_COMMAND:
+                    case TODO:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("ToDo items must have a description.");
                         }
@@ -207,7 +210,7 @@ public class Duke {
                         tasks.add(newToDo);
                         Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newToDo + "\n");
                         break;
-                    case ADD_DEADLINE_COMMAND:
+                    case DEADLINE:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("Deadline items must have a description and due date.\n");
                         }
@@ -227,7 +230,7 @@ public class Duke {
                         tasks.add(newDeadline);
                         Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newDeadline + "\n");
                         break;
-                    case ADD_EVENT_COMMAND:
+                    case EVENT:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("Event items must have a description and a date.\n");
                         }
@@ -247,7 +250,7 @@ public class Duke {
                         tasks.add(newEvent);
                         Duke.printFromRed("Added task #" + (tasks.size()) + ": " + newEvent + "\n");
                         break;
-                    case DELETE_COMMAND:
+                    case DELETE:
                         if (userArgument == null || userArgument.isBlank()) {
                             throw new DukeException("Please indicate a task item number to delete.");
                         }
@@ -269,7 +272,7 @@ public class Duke {
                         Duke.printFromRed(deletedTask + "\n");
                         break;
                     default:
-                        throw new DukeException("Unknown command.");
+                        throw new DukeException("Something went terribly wrong, unknown command.");
                 }
             } catch (DukeException e) {
                 Duke.printFromRed("Oops, something went wrong: ");
