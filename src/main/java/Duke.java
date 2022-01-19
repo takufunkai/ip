@@ -1,4 +1,5 @@
 import usertask.Deadline;
+import usertask.Event;
 import usertask.ToDo;
 import usertask.UserTask;
 
@@ -55,6 +56,7 @@ public class Duke {
     private final static String UNMARK_COMMAND = "unmark";
     private final static String ADD_TODO_COMMAND = "todo";
     private final static String ADD_DEADLINE_COMMAND = "deadline";
+    private final static String ADD_EVENT_COMMAND = "event";
     /* END CONSTANTS */
 
     private final static List<UserTask> tasks = new ArrayList<>(100);
@@ -162,6 +164,12 @@ public class Duke {
                     UserTask newDeadline = new Deadline(parsedArguments[0], parsedArguments[1]);
                     tasks.add(newDeadline);
                     printFromRed("Added task #" + (tasks.size()) + ": " + newDeadline + "\n");
+                    break;
+                case ADD_EVENT_COMMAND:
+                    parsedArguments = userInputSplit[1].split(" /at ");
+                    UserTask newEvent = new Event(parsedArguments[0], parsedArguments[1]);
+                    tasks.add(newEvent);
+                    printFromRed("Added task #" + (tasks.size()) + ": " + newEvent + "\n");
                     break;
                 default:
                     printFromRed("Unknown command, try again?");
