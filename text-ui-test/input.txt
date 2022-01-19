@@ -3,11 +3,39 @@ todo hello
 deadline start working /by 0900hrs
 event go fishing /at i'm not sure
 list
-random
 mark 1
 mark 3
 list
 unmark 1
 mark 2
 list
+START ERROR HANDLING HERE
+
+random
+todo
+todo
+deadline
+deadline /by
+deadline     /by
+deadline here /by
+deadline     /by tomorrow
+deadline /by tomorrow
+deadline here /at tomorrow
+event
+event /at
+event    /at
+event here /at
+event      /at tomorrow
+event /at tomorrow
+event here /by tomorrow
+mark 10
+mark -1
+mark
+mark NaN
+mark .
+unmark 9
+unmark 0
+unmark
+unmark NaN
+unmark .
 bye

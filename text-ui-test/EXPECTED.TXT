@@ -22,6 +22,7 @@
  ---------------  ---------------  ---------------  ---------------  ---------------
 
                   >>> â?º YOU > [31m                  >>> à¶? > Alright, here are your recorded tasks.[0m
+[31m                  >>> à¶? > It seems you have no tasks at the moment, why not add one?[0m
 [31m                  ----------------[0m
 [31m                  TOTAL: 0[0m
 [31m                  ----------------[0m
@@ -42,7 +43,6 @@
                   [31m3. [E][ ] go fishing (at: i'm not sure)[0m
 [31m                  ----------------[0m
 
-                  >>> â?º YOU > [31m                  >>> à¶? > Unknown command, try again?[0m
                   >>> â?º YOU > [31m                  >>> à¶? > Good job! Let's keep it going, this spaceship needs you![0m
 [31m                  >>> à¶? > [T][X] hello
 [0m
@@ -73,6 +73,107 @@
                   [31m3. [E][X] go fishing (at: i'm not sure)[0m
 [31m                  ----------------[0m
 
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Unknown command.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Unknown command.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Unknown command.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** ToDo items must have a description.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** ToDo items must have a description.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Deadline items must have a description and a due date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Event items must have a description and a date.
+
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** There are currently 3 tasks. Please enter a valid number to mark
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Are you trying to be funny?
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Please indicate a task item number to mark.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Your tasks are identified by numbers! Please input a valid number.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Your tasks are identified by numbers! Please input a valid number.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** There are currently 3 tasks. Please enter a valid number to unmark
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Are you trying to be funny?
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Please indicate a task item number to unmark.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Your tasks are identified by numbers! Please input a valid number.
+[0m
+                  >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
+[31m                  >>> à¶? > ** Your tasks are identified by numbers! Please input a valid number.
+[0m
                   >>> â?º YOU > [31m                  >>> à¶? > Thank you for chatting with me... bye forever[0m
 
  ---------------  ---------------  ---------------  ---------------  ---------------
