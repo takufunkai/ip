@@ -1,7 +1,4 @@
-import usertask.Deadline;
-import usertask.Event;
-import usertask.ToDo;
-import usertask.UserTask;
+import usertask.*;
 
 public enum Command {
     LIST {
@@ -85,9 +82,13 @@ public enum Command {
             }
             String taskName = parsed_input[0];
             String date = parsed_input[1];
-            UserTask task = new Deadline(taskName, date);
-            Duke.tasks.addTask(task);
-            Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            try {
+                UserTask task = new Deadline(taskName, date);
+                Duke.tasks.addTask(task);
+                Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            } catch (UserTaskException e) {
+                throw new DukeException("Unable to create task: " + e.getMessage());
+            }
         }
     },
     EVENT {
@@ -99,9 +100,13 @@ public enum Command {
             }
             String taskName = parsed_input[0];
             String date = parsed_input[1];
-            UserTask task = new Event(taskName, date);
-            Duke.tasks.addTask(task);
-            Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            try {
+                UserTask task = new Event(taskName, date);
+                Duke.tasks.addTask(task);
+                Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            } catch (UserTaskException e) {
+                throw new DukeException("Unable to create task: " + e.getMessage());
+            }
         }
     },
     DELETE {

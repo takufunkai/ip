@@ -1,15 +1,12 @@
 package usertask;
 
-public class Deadline extends UserTask {
-    private final String time;
-
-    public Deadline(String name, String time) {
-        super(name);
-        this.time = time;
+public class Deadline extends UserTaskWithTime {
+    public Deadline(String name, String dateTime) throws UserTaskException {
+        super(name, dateTime);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.time + ")";
+        return String.format(super.toString(), "[D]", "by");
     }
 }

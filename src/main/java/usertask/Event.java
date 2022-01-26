@@ -1,15 +1,12 @@
 package usertask;
 
-public class Event extends UserTask {
-    private final String time;
-
-    public Event(String name, String time) {
-        super(name);
-        this.time = time;
+public class Event extends UserTaskWithTime {
+    public Event(String name, String dateTime) throws UserTaskException {
+        super(name, dateTime);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (at: " + time + ")";
+        return String.format(super.toString(), "[E]", "at");
     }
 }
