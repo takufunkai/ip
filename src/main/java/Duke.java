@@ -110,7 +110,13 @@ public class Duke {
         Duke.printGreeting();
 
         SaveHandler sv = new SaveHandler();
+        try {
 
+            sv.restore(tasks);
+        } catch (DukeException e) {
+            Duke.printFromRed("Oops, something went wrong: ");
+            Duke.printFromRed("** " + e.getMessage() + "\n");
+        }
         while (Duke.isRunning) {
             try {
                 String userInput = Duke.awaitInputFromUser(sc);

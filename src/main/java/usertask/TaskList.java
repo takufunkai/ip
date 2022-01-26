@@ -35,6 +35,13 @@ public class TaskList implements DukeSavable {
         this.tasks.add(task);
     }
 
+    public void addTask(UserTask task, boolean done) {
+        if (done) {
+            task.setDone();
+        }
+        this.tasks.add(task);
+    }
+
     @Override
     public String toDukeSaveFormat() {
         StringBuilder sb = new StringBuilder();
