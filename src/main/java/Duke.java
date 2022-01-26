@@ -1,6 +1,5 @@
 import usertask.TaskList;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -87,16 +86,21 @@ public class Duke {
 
     protected static void listTasks() {
         String tableDivider = colourStringRed(MESSAGE_BUFFER + "----------------");
-        System.out.println(tableDivider);
-        System.out.println(colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.getTasksCount()));
-        System.out.println(tableDivider);
-        System.out.println(tasks); // TODO: fix formatting of output
-        System.out.println(tableDivider);
-        System.out.println();
+        System.out.println(tableDivider + "\n" +
+                colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.getTasksCount()) + "\n" +
+                tableDivider);
+
+        StringBuilder sb = new StringBuilder();
+        String[] taskStringsList = tasks.toString().split("\\r?\\n");
+        for (String s : taskStringsList) {
+            sb.append(MESSAGE_BUFFER).append(s).append("\n");
+        }
+        System.out.print(colourStringRed(sb.toString()));
+        System.out.println(tableDivider + "\n");
     }
     /* END IO FUNCTIONS */
 
-    public static void terminate() {
+    protected static void terminate() {
         Duke.isRunning = false;
     }
 
@@ -106,14 +110,14 @@ public class Duke {
         while (Duke.isRunning) {
             try {
                 String userInput = Duke.awaitInputFromUser(sc);
-                String[] userInputSplit = userInput.split("\\s+");
+                String[] userInputSplit = userInput.split("\\s+", 2);
                 Command userCommand;
                 try {
                     userCommand = Command.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
                 } catch (IllegalArgumentException e) {
                     throw new DukeException("Unknown command.");
                 }
-                userCommand.validateAndExecute(Arrays.copyOfRange(userInputSplit, 1, userInputSplit.length));
+                userCommand.validateAndExecute(userInputSplit.length == 1 ? "" : userInputSplit[1]);
             } catch (DukeException e) {
                 Duke.printFromRed("Oops, something went wrong: ");
                 Duke.printFromRed("** " + e.getMessage() + "\n");
