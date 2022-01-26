@@ -1,10 +1,10 @@
 package usertask;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public abstract class UserTaskWithTime extends UserTask {
     private final static String DATE_FORMAT = "dd-MM-yyyy";
@@ -25,10 +25,20 @@ public abstract class UserTaskWithTime extends UserTask {
             } else {
                 this.dateTime = date.atStartOfDay();
             }
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeException e) {
             throw new UserTaskException("Unable to parse date-time. " +
                     "Please ensure it is of the following format: " +
                     DATE_FORMAT + " " + TIME_FORMAT);
+        }
+    }
+
+    public boolean isDated(String date) throws UserTaskException {
+        try {
+            return this.dateTime.toLocalDate().isEqual(LocalDate.parse(date, DATE_FORMATTER));
+        } catch (DateTimeException e) {
+            throw new UserTaskException("Unable to parse date. " +
+                    "Please ensure it is of the following format: " +
+                    DATE_FORMAT);
         }
     }
 

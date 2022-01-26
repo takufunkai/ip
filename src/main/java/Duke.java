@@ -85,13 +85,23 @@ public class Duke {
     }
 
     protected static void listTasks() {
-        String tableDivider = colourStringRed(MESSAGE_BUFFER + "----------------");
-        System.out.println(tableDivider + "\n" +
-                colourStringRed(MESSAGE_BUFFER + "TOTAL: " + tasks.getTasksCount()) + "\n" +
-                tableDivider);
+        Duke.listTasks("");
+    }
 
+    protected static void listTasks(String date) {
+        String tableDivider = colourStringRed(MESSAGE_BUFFER + "----------------");
+        TaskList filteredTasks;
+        if (!date.isBlank()) {
+            filteredTasks = Duke.tasks.filterByDate(date);
+        } else {
+            filteredTasks = Duke.tasks;
+        }
+
+        System.out.println(tableDivider + "\n" +
+                colourStringRed(MESSAGE_BUFFER + "TOTAL: " + filteredTasks.getTasksCount()) + "\n" +
+                tableDivider);
         StringBuilder sb = new StringBuilder();
-        String[] taskStringsList = tasks.toString().split("\\r?\\n");
+        String[] taskStringsList = filteredTasks.toString().split("\\r?\\n");
         for (String s : taskStringsList) {
             sb.append(MESSAGE_BUFFER).append(s).append("\n");
         }
