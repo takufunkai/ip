@@ -1,8 +1,13 @@
 package usertask;
 
-public abstract class UserTask {
+public abstract class UserTask implements DukeSavable {
     private final String name;
     private boolean isDone;
+
+    @Override
+    public String toDukeSaveFormat() {
+        return this.isDone ? "1" : "0" + "|" + name;
+    }
 
     UserTask(String name) {
         this.name = name;

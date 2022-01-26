@@ -6,6 +6,11 @@ public class ToDo extends UserTask {
     }
 
     @Override
+    public String toDukeSaveFormat() {
+        return "T|" + super.toDukeSaveFormat();
+    }
+
+    @Override
     public String toString() {
         return "[T]" + super.toString();
     }

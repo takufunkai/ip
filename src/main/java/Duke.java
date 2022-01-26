@@ -1,5 +1,6 @@
 import usertask.TaskList;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -104,9 +105,18 @@ public class Duke {
         Duke.isRunning = false;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         Duke.printGreeting();
+
+        SaveHandler sv = new SaveHandler();
+        try {
+
+            sv.restore(tasks);
+        } catch (DukeException e) {
+            Duke.printFromRed("Oops, something went wrong: ");
+            Duke.printFromRed("** " + e.getMessage() + "\n");
+        }
         while (Duke.isRunning) {
             try {
                 String userInput = Duke.awaitInputFromUser(sc);
@@ -124,6 +134,8 @@ public class Duke {
             }
         }
         Duke.printExitMessage();
+
+        sv.save(tasks);
         sc.close();
     }
 }
