@@ -9,6 +9,11 @@ public class Deadline extends UserTask {
     }
 
     @Override
+    public String toDukeSaveFormat() {
+        return "D|" + super.toDukeSaveFormat() + "|" + this.time;
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + this.time + ")";
     }

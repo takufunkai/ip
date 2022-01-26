@@ -3,7 +3,7 @@ package usertask;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskList {
+public class TaskList implements DukeSavable {
     private final List<UserTask> tasks;
 
     public TaskList(int initialCapacity) {
@@ -33,6 +33,15 @@ public class TaskList {
 
     public void addTask(UserTask task) {
         this.tasks.add(task);
+    }
+
+    @Override
+    public String toDukeSaveFormat() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < tasks.size(); i++) {
+            sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
