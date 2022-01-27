@@ -2,12 +2,14 @@ package usertask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class TaskList implements DukeSavable {
     private final List<UserTask> tasks;
 
     public TaskList(int initialCapacity) {
-        this.tasks = new ArrayList<>(initialCapacity);
+        this.tasks = new ArrayList<>(initialCapacity + 1);
         this.tasks.add(null); // Index 0 is empty
     }
 
@@ -49,6 +51,23 @@ public class TaskList implements DukeSavable {
             sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
         }
         return sb.toString();
+    }
+
+    public TaskList filterByDate(String date) {
+        List<UserTask> filteredList = tasks
+                .stream()
+                .filter((task) -> {
+                    try {
+                        return task instanceof UserTaskWithTime && ((UserTaskWithTime) task).isDated(date);
+                    } catch (UserTaskException e) {
+                        System.out.println("Failed to get filtered tasks: " + e.getMessage() + date + "ok");
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        TaskList filteredTaskList = new TaskList(filteredList.size());
+        filteredTaskList.tasks.addAll(filteredList);
+        return filteredTaskList;
     }
 
     @Override

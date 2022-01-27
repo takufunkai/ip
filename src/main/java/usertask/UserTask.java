@@ -6,7 +6,7 @@ public abstract class UserTask implements DukeSavable {
 
     @Override
     public String toDukeSaveFormat() {
-        return this.isDone ? "1" : "0" + "|" + name;
+        return "%s|" + (isDone ? "1" : "0") + "|" + name;
     }
 
     UserTask(String name) {

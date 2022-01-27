@@ -1,7 +1,4 @@
-import usertask.Deadline;
-import usertask.Event;
-import usertask.TaskList;
-import usertask.ToDo;
+import usertask.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,18 +44,22 @@ public class SaveHandler {
                 }
                 String taskName = parsedTask[2];
                 boolean isDone = parsedTask[1].equals("1");
-                switch (code) {
-                case T:
-                    emptyTasks.addTask(new ToDo(taskName), isDone);
-                    break;
-                case D:
-                    emptyTasks.addTask(new Deadline(taskName, parsedTask[3]), isDone);
-                    break;
-                case E:
-                    emptyTasks.addTask(new Event(taskName, parsedTask[3]), isDone);
-                    break;
-                default:
-                    throw new DukeException("Unknown task type for saved item.");
+                try {
+                    switch (code) {
+                    case T:
+                        emptyTasks.addTask(new ToDo(taskName), isDone);
+                        break;
+                    case D:
+                        emptyTasks.addTask(new Deadline(taskName, parsedTask[3]), isDone);
+                        break;
+                    case E:
+                        emptyTasks.addTask(new Event(taskName, parsedTask[3]), isDone);
+                        break;
+                    default:
+                        throw new DukeException("Unknown task type for saved item.");
+                    }
+                } catch (UserTaskException e) {
+                    System.out.println("Failed to restore saved task: " + e.getMessage());
                 }
             }
         } catch (FileNotFoundException e) {

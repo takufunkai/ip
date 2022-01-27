@@ -1,17 +1,30 @@
-import usertask.Deadline;
-import usertask.Event;
-import usertask.ToDo;
-import usertask.UserTask;
+import usertask.*;
 
 public enum Command {
     LIST {
         @Override
-        public void validateAndExecute(String input) {
-            Duke.printFromRed("Alright, here are your recorded tasks.");
+        public void validateAndExecute(String input) throws DukeException {
+            if (input.isBlank()) {
+                Duke.printFromRed("Alright, here are your recorded tasks.");
+                if (Duke.tasks.getTasksCount() == 0) {
+                    Duke.printFromRed("It seems you have no tasks at the moment, why not add one?");
+                }
+                Duke.listTasks();
+                return;
+            }
+
+            String[] args = input.split(" ");
+            if (!args[0].equalsIgnoreCase("date")) {
+                throw new DukeException("I can't understand the parameters you have specified.");
+            }
+            if (args.length == 1) {
+                throw new DukeException("Please specify a valid date.");
+            }
+            Duke.printFromRed("Alright, here are your recorded tasks for " + args[1]);
             if (Duke.tasks.getTasksCount() == 0) {
                 Duke.printFromRed("It seems you have no tasks at the moment, why not add one?");
             }
-            Duke.listTasks();
+            Duke.listTasks(args[1]);
         }
     },
     MARK {
@@ -85,9 +98,13 @@ public enum Command {
             }
             String taskName = parsed_input[0];
             String date = parsed_input[1];
-            UserTask task = new Deadline(taskName, date);
-            Duke.tasks.addTask(task);
-            Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            try {
+                UserTask task = new Deadline(taskName, date);
+                Duke.tasks.addTask(task);
+                Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            } catch (UserTaskException e) {
+                throw new DukeException("Unable to create task: " + e.getMessage());
+            }
         }
     },
     EVENT {
@@ -99,9 +116,13 @@ public enum Command {
             }
             String taskName = parsed_input[0];
             String date = parsed_input[1];
-            UserTask task = new Event(taskName, date);
-            Duke.tasks.addTask(task);
-            Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            try {
+                UserTask task = new Event(taskName, date);
+                Duke.tasks.addTask(task);
+                Duke.printFromRed("Added task #" + (Duke.tasks.getTasksCount()) + ": " + task + "\n");
+            } catch (UserTaskException e) {
+                throw new DukeException("Unable to create task: " + e.getMessage());
+            }
         }
     },
     DELETE {
@@ -134,7 +155,6 @@ public enum Command {
         public void validateAndExecute(String input) {
             Duke.terminate();
         }
-
     };
 
     public abstract void validateAndExecute(String input) throws DukeException;
