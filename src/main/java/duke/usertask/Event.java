@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 public class Event extends UserTaskWithTime {
     public Event(String name, String dateTime) throws UserTaskException {

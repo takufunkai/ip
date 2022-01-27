@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -36,9 +36,9 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
         }
     }
 
-    public boolean isDated(String date) throws UserTaskException {
+    public boolean isDated(LocalDateTime date) throws UserTaskException {
         try {
-            return this.dateTime.toLocalDate().isEqual(LocalDate.parse(date, PARSE_DATE_FORMATTER));
+            return this.dateTime.toLocalDate().isEqual(date.toLocalDate());
         } catch (DateTimeException e) {
             throw new UserTaskException("Unable to parse date. " +
                     "Please ensure it is of the following format: " +

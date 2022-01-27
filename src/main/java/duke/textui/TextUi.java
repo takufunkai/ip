@@ -1,19 +1,18 @@
-import usertask.TaskList;
+package duke.textui;
 
-import java.io.IOException;
-import java.util.Locale;
+import duke.utils.Utils;
+
 import java.util.Scanner;
 
-public class Duke {
-    /* CONSTANTS */
-    private final static String CREW_MATE_LOGO = "ඞ";
-    private final static String MESSAGE_BUFFER = "                  ";
-    private final static String DIVIDER =
+public class TextUi {
+    public final static String CREW_MATE_LOGO = "ඞ";
+    public final static String MESSAGE_BUFFER = "                  ";
+    public final static String DIVIDER =
             " ---------------  ---------------  ---------------  ---------------  ---------------\n" +
                     " -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-  -:::::::::::::-\n" +
                     " ---------------  ---------------  ---------------  ---------------  ---------------\n";
-    private final static String GREETING_MESSAGE =
-            colourStringRed(
+    public final static String GREETING_MESSAGE =
+            Utils.colourStringRed(
                     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n" +
@@ -40,30 +39,18 @@ public class Duke {
                             "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n" +
                             "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n") +
                     DIVIDER;
-    /* END CONSTANTS */
 
-    protected final static TaskList tasks = new TaskList((100));
-    private static boolean isRunning = true;
+    private final Scanner sc;
 
-    /* HELPER FUNCTIONS */
-    private static String colourStringRed(String out) {
-        String ANSI_RED = "\u001B[31m";
-        String ANSI_RESET = "\u001B[0m";
-        return ANSI_RED + out + ANSI_RESET;
+    public TextUi() {
+        this.sc = new Scanner(System.in);
     }
-    /* END HELPER FUNCTIONS */
 
-    /* IO FUNCTIONS */
-    private static void printGreeting() {
+    public void printGreeting() {
         System.out.println(GREETING_MESSAGE);
     }
 
-    protected static void printFromRed(String message) {
-        String redMessageSuffix = MESSAGE_BUFFER + ">>> " + CREW_MATE_LOGO + " > ";
-        System.out.println(colourStringRed(redMessageSuffix + message));
-    }
-
-    private static void printExitMessage() {
+    public void printExitMessage() {
         printFromRed("Thank you for chatting with me... bye forever");
         System.out.println();
         System.out.println(DIVIDER +
@@ -71,7 +58,7 @@ public class Duke {
                 "\n" +
                 "　　　.　　　 　　.　　　　　。　　 。　. 　\n" +
                 "\n" +
-                ".　　 。　　　　　 " + colourStringRed(CREW_MATE_LOGO) + " 。 . 　　 • 　　　　•\n" +
+                ".　　 。　　　　　 " + Utils.colourStringRed(CREW_MATE_LOGO) + " 。 . 　　 • 　　　　•\n" +
                 "\n" +
                 "　　ﾟ　　 Red was not An Impostor.　 。　.\n" +
                 "\n" +
@@ -80,72 +67,17 @@ public class Duke {
                 "　　ﾟ　　　.　　　. ,　　　　.　 .");
     }
 
-    private static String awaitInputFromUser(Scanner sc) {
-        System.out.print(MESSAGE_BUFFER + ">>> ☺ YOU > ");
-        return sc.nextLine();
+    public void printWithBuffer(String message) {
+        System.out.print(Utils.colourStringRed(MESSAGE_BUFFER + message));
     }
 
-    protected static void listTasks() {
-        Duke.listTasks("");
+    public void printFromRed(String message) {
+        this.printWithBuffer(">>> " + CREW_MATE_LOGO + " > " + message);
     }
 
-    protected static void listTasks(String date) {
-        String tableDivider = colourStringRed(MESSAGE_BUFFER + "----------------");
-        TaskList filteredTasks;
-        if (!date.isBlank()) {
-            filteredTasks = Duke.tasks.filterByDate(date);
-        } else {
-            filteredTasks = Duke.tasks;
-        }
-
-        System.out.println(tableDivider + "\n" +
-                colourStringRed(MESSAGE_BUFFER + "TOTAL: " + filteredTasks.getTasksCount()) + "\n" +
-                tableDivider);
-        StringBuilder sb = new StringBuilder();
-        String[] taskStringsList = filteredTasks.toString().split("\\r?\\n");
-        for (String s : taskStringsList) {
-            sb.append(MESSAGE_BUFFER).append(s).append("\n");
-        }
-        System.out.print(colourStringRed(sb.toString()));
-        System.out.println(tableDivider + "\n");
-    }
-    /* END IO FUNCTIONS */
-
-    protected static void terminate() {
-        Duke.isRunning = false;
+    public String awaitInputFromUser() {
+        printWithBuffer(">>> ☺ YOU > ");
+        return this.sc.nextLine();
     }
 
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        Duke.printGreeting();
-
-        SaveHandler sv = new SaveHandler();
-        try {
-
-            sv.restore(tasks);
-        } catch (DukeException e) {
-            Duke.printFromRed("Oops, something went wrong: ");
-            Duke.printFromRed("** " + e.getMessage() + "\n");
-        }
-        while (Duke.isRunning) {
-            try {
-                String userInput = Duke.awaitInputFromUser(sc);
-                String[] userInputSplit = userInput.split("\\s+", 2);
-                Command userCommand;
-                try {
-                    userCommand = Command.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
-                } catch (IllegalArgumentException e) {
-                    throw new DukeException("Unknown command.");
-                }
-                userCommand.validateAndExecute(userInputSplit.length == 1 ? "" : userInputSplit[1]);
-            } catch (DukeException e) {
-                Duke.printFromRed("Oops, something went wrong: ");
-                Duke.printFromRed("** " + e.getMessage() + "\n");
-            }
-        }
-        Duke.printExitMessage();
-
-        sv.save(tasks);
-        sc.close();
-    }
 }

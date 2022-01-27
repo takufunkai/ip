@@ -1,5 +1,6 @@
-package usertask;
+package duke.usertask;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,26 @@ public class TaskList implements DukeSavable {
         this.tasks.add(task);
     }
 
+//    public void listTasks() {
+//        this.listTasks("");
+//    }
+//
+//    public void listTasks(String date) {
+//        String tableDivider = "----------------";
+//        TaskList filteredTasks = date.isBlank() ? this : this.filterByDate(date);
+//
+//        String metadataString = tableDivider + "\n" +
+//                "TOTAL: " + filteredTasks.getTasksCount() + "\n" + tableDivider;
+//        StringBuilder sb = new StringBuilder();
+//        String[] taskStringsList = filteredTasks.toString().split("\\r?\\n");
+//        for (String s : taskStringsList) {
+//
+//            sb.append(MESSAGE_BUFFER).append(s).append("\n");
+//        }
+//        System.out.print(colourStringRed(sb.toString()));
+//        System.out.println(tableDivider + "\n");
+//    }
+
     @Override
     public String toDukeSaveFormat() {
         StringBuilder sb = new StringBuilder();
@@ -53,7 +74,7 @@ public class TaskList implements DukeSavable {
         return sb.toString();
     }
 
-    public TaskList filterByDate(String date) {
+    public TaskList filterByDate(LocalDateTime date) {
         List<UserTask> filteredList = tasks
                 .stream()
                 .filter((task) -> {

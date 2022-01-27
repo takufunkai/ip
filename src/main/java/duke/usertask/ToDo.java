@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 public class ToDo extends UserTask {
     public ToDo(String name) {

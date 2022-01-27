@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 interface DukeSavable {
     String toDukeSaveFormat();

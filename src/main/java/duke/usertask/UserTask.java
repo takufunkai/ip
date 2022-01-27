@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 public abstract class UserTask implements DukeSavable {
     private final String name;

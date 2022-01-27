@@ -89,13 +89,13 @@
 [0m[31m                  ----------------[0m
 
                   >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
-[31m                  >>> à¶? > ** Unknown command.
+[31m                  >>> à¶? > ** Unknown duke.command.
 [0m
                   >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
-[31m                  >>> à¶? > ** Unknown command.
+[31m                  >>> à¶? > ** Unknown duke.command.
 [0m
                   >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
-[31m                  >>> à¶? > ** Unknown command.
+[31m                  >>> à¶? > ** Unknown duke.command.
 [0m
                   >>> â?º YOU > [31m                  >>> à¶? > Oops, something went wrong: [0m
 [31m                  >>> à¶? > ** ToDo items must have a description.

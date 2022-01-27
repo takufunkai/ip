@@ -1,4 +1,4 @@
-package usertask;
+package duke.usertask;
 
 public class Deadline extends UserTaskWithTime {
     public Deadline(String name, String dateTime) throws UserTaskException {
