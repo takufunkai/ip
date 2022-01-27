@@ -3,15 +3,21 @@ package duke.command;
 import duke.DukeException;
 import duke.textui.TextUi;
 import duke.usertask.TaskList;
+import duke.utils.Utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
+
+import static duke.utils.Utils.DATE_FORMAT;
+import static duke.utils.Utils.TIME_FORMAT;
 
 public abstract class Command {
     public enum CommandNames {
         LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE;
     }
 
-    public abstract void execute(TextUi ui, TaskList taskList);
+    public abstract void execute(TextUi ui, TaskList taskList) throws DukeException;
 
     public boolean isExit() {
         return false;
@@ -22,19 +28,31 @@ public abstract class Command {
             throw new DukeException("No command was given. Please specify a valid command!");
         }
         String[] userInputSplit = input.split("\\s+", 2);
-        CommandNames cmd = CommandNames.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
+        CommandNames cmd;
+        try {
+            cmd = CommandNames.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            throw new DukeException("I don't know what " + userInputSplit[0] + " means.");
+        }
         switch (cmd) {
         case BYE:
             return new ByeCommand();
         case LIST:
-            if (userInputSplit.length == 1) {
+            if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
                 return new ListCommand();
             }
             String[] listArgs = userInputSplit[1].split(" ");
-            if (!listArgs[0].equalsIgnoreCase("date")) {
+            if (!listArgs[0].equalsIgnoreCase("date") || listArgs.length == 1) {
                 throw new DukeException("Unknown parameter supplied to list command.");
             }
-            return new ListCommand(listArgs[1]);
+            try {
+                LocalDateTime filterDate = Utils.parseToLocalDateTime(listArgs[1]);
+                return new ListCommand(filterDate);
+            } catch (DateTimeParseException e) {
+                throw new DukeException(String.format("Failed to parse date %s. " +
+                        "Please ensure it is of the following format: " +
+                        DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
+            }
         case MARK:
             if (userInputSplit.length == 1) {
                 throw new DukeException("Please indicate a task item number to mark");
@@ -104,7 +122,7 @@ public abstract class Command {
             }
             taskName = parsedInput[0];
             date = parsedInput[1];
-            return new DeadlineCommand(taskName, date);
+            return new EventCommand(taskName, date);
         default:
             throw new DukeException("Unknown command.");
         }

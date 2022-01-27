@@ -14,7 +14,7 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TextUi ui, TaskList taskList) {
         UserTask task = taskList.unmarkTask(index);
-        ui.printFromRed("I thought you were done with it?");
+        ui.printFromRed("I thought you were done with it?\n");
         ui.printFromRed(task + "\n");
     }
 }

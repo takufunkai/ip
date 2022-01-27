@@ -18,7 +18,7 @@ public class Duke {
             try {
                 sv.restore(tasks);
             } catch (DukeException e) {
-                ui.printFromRed("Oops, something went wrong: ");
+                ui.printFromRed("Oops, something went wrong: " + "\n");
                 ui.printFromRed("** " + e.getMessage() + "\n");
             }
         }
@@ -28,9 +28,10 @@ public class Duke {
                 String userInput = ui.awaitInputFromUser();
                 Command cmd = Command.parse(userInput);
                 cmd.execute(ui, tasks);
+                ui.printWithBuffer("\n");
                 isRunning = !cmd.isExit();
             } catch (DukeException e) {
-                ui.printFromRed("Oops, something went wrong: ");
+                ui.printFromRed("Oops, something went wrong: " + "\n");
                 ui.printFromRed("** " + e.getMessage() + "\n");
             }
         }

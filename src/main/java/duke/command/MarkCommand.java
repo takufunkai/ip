@@ -14,7 +14,7 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TextUi ui, TaskList taskList) {
         UserTask task = taskList.markTask(index);
-        ui.printFromRed("Good job! Let's keep it going, this spaceship needs you!");
+        ui.printFromRed("Good job! Let's keep it going, this spaceship needs you!\n");
         ui.printFromRed(task + "\n");
     }
 }

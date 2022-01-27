@@ -1,5 +1,6 @@
 package duke.command;
 
+import duke.DukeException;
 import duke.textui.TextUi;
 import duke.usertask.Deadline;
 import duke.usertask.TaskList;
@@ -16,15 +17,13 @@ public class DeadlineCommand extends Command {
     }
 
     @Override
-    public void execute(TextUi ui, TaskList taskList) {
+    public void execute(TextUi ui, TaskList taskList) throws DukeException {
         try {
             UserTask task = new Deadline(description, deadlineDateTime);
             taskList.addTask(task);
             ui.printFromRed("Added task #" + (taskList.getTasksCount()) + ": " + task + "\n");
         } catch (UserTaskException e) {
-            // TODO: throw a CommandException here regarding invalid dt fmt
-            // replace following:
-            System.out.println(e.getMessage());
+            throw new DukeException("Failed to create new deadline item: " + e.getMessage());
         }
 
     }

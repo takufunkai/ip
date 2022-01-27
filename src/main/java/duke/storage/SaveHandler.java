@@ -62,7 +62,7 @@ public class SaveHandler {
                         throw new DukeException("Unknown task type for saved item.");
                     }
                 } catch (UserTaskException e) {
-                    System.out.println("Failed to restore saved task: " + e.getMessage());
+                    throw new DukeException("Failed to restore save file: " + e.getMessage());
                 }
             }
         } catch (FileNotFoundException e) {

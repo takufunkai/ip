@@ -1,9 +1,10 @@
 package duke.usertask;
 
+import duke.DukeException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class TaskList implements DukeSavable {
@@ -45,26 +46,6 @@ public class TaskList implements DukeSavable {
         this.tasks.add(task);
     }
 
-//    public void listTasks() {
-//        this.listTasks("");
-//    }
-//
-//    public void listTasks(String date) {
-//        String tableDivider = "----------------";
-//        TaskList filteredTasks = date.isBlank() ? this : this.filterByDate(date);
-//
-//        String metadataString = tableDivider + "\n" +
-//                "TOTAL: " + filteredTasks.getTasksCount() + "\n" + tableDivider;
-//        StringBuilder sb = new StringBuilder();
-//        String[] taskStringsList = filteredTasks.toString().split("\\r?\\n");
-//        for (String s : taskStringsList) {
-//
-//            sb.append(MESSAGE_BUFFER).append(s).append("\n");
-//        }
-//        System.out.print(colourStringRed(sb.toString()));
-//        System.out.println(tableDivider + "\n");
-//    }
-
     @Override
     public String toDukeSaveFormat() {
         StringBuilder sb = new StringBuilder();
@@ -74,20 +55,18 @@ public class TaskList implements DukeSavable {
         return sb.toString();
     }
 
-    public TaskList filterByDate(LocalDateTime date) {
-        List<UserTask> filteredList = tasks
-                .stream()
-                .filter((task) -> {
-                    try {
-                        return task instanceof UserTaskWithTime && ((UserTaskWithTime) task).isDated(date);
-                    } catch (UserTaskException e) {
-                        System.out.println("Failed to get filtered tasks: " + e.getMessage() + date + "ok");
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
-        TaskList filteredTaskList = new TaskList(filteredList.size());
-        filteredTaskList.tasks.addAll(filteredList);
+    public TaskList filterByDate(LocalDateTime date) throws DukeException {
+        TaskList filteredTaskList = new TaskList(100);
+        try {
+            for (UserTask currTask : tasks) {
+                if (currTask instanceof UserTaskWithTime &&
+                        ((UserTaskWithTime) currTask).isDated(date)) {
+                    filteredTaskList.addTask(currTask);
+                }
+            }
+        } catch (UserTaskException e) {
+            throw new DukeException("Failed to get filtered tasks: " + e.getMessage());
+        }
         return filteredTaskList;
     }
 

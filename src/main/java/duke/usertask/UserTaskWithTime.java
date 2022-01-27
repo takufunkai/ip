@@ -1,19 +1,16 @@
 package duke.usertask;
 
+import duke.utils.Utils;
+
 import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static duke.utils.Utils.DATE_FORMAT;
+import static duke.utils.Utils.TIME_FORMAT;
+
 public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
-    private final static String DATE_FORMAT = "dd-MM-yyyy";
-    private final static String TIME_FORMAT = "HH:mm";
-    private final static DateTimeFormatter PARSE_DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    private final static DateTimeFormatter PARSE_TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT);
-    private final static DateTimeFormatter PARSE_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern(DATE_FORMAT + " " + TIME_FORMAT);
-    private final static DateTimeFormatter DISPLAY_DATE_TIME_FORMATTER =
+    private final static DateTimeFormatter TO_DISPLAY_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a");
 
     private final LocalDateTime dateTime;
@@ -22,13 +19,9 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
         super(name);
         String[] dateTimeSplit = dateTime.split(" ");
         try {
-            LocalDate date = LocalDate.parse(dateTimeSplit[0], PARSE_DATE_FORMATTER);
-            if (dateTimeSplit.length > 1) {
-                this.dateTime = date.atTime(
-                        LocalTime.parse(dateTimeSplit[1], PARSE_TIME_FORMATTER));
-            } else {
-                this.dateTime = date.atStartOfDay();
-            }
+            this.dateTime = dateTimeSplit.length > 1
+                    ? Utils.parseToLocalDateTime(dateTimeSplit[0], dateTimeSplit[1])
+                    : Utils.parseToLocalDateTime(dateTimeSplit[0]);
         } catch (DateTimeException e) {
             throw new UserTaskException("Unable to parse date-time. " +
                     "Please ensure it is of the following format: " +
@@ -48,11 +41,11 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
 
     @Override
     public String toDukeSaveFormat() {
-        return super.toDukeSaveFormat() + "|" + this.dateTime.format(PARSE_DATE_TIME_FORMATTER);
+        return super.toDukeSaveFormat() + "|" + Utils.formatLocalDateTime(this.dateTime);
     }
 
     @Override
     public String toString() {
-        return "%s" + super.toString() + " (%s: " + this.dateTime.format(DISPLAY_DATE_TIME_FORMATTER) + ")";
+        return "%s" + super.toString() + " (%s: " + Utils.formatLocalDateTime(this.dateTime, TO_DISPLAY_DATE_TIME_FORMATTER) + ")";
     }
 }
