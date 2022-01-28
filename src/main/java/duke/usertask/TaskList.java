@@ -46,15 +46,6 @@ public class TaskList implements DukeSavable {
         this.tasks.add(task);
     }
 
-    @Override
-    public String toDukeSaveFormat() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < tasks.size(); i++) {
-            sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
-        }
-        return sb.toString();
-    }
-
     public TaskList filterByDate(LocalDateTime date) throws DukeException {
         TaskList filteredTaskList = new TaskList(100);
         try {
@@ -68,6 +59,15 @@ public class TaskList implements DukeSavable {
             throw new DukeException("Failed to get filtered tasks: " + e.getMessage());
         }
         return filteredTaskList;
+    }
+
+    @Override
+    public String toDukeSaveFormat() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < tasks.size(); i++) {
+            sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
