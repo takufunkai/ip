@@ -13,8 +13,11 @@ import static duke.utils.Utils.DATE_FORMAT;
 import static duke.utils.Utils.TIME_FORMAT;
 
 public abstract class Command {
-    public enum CommandNames {
-        LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE;
+    /**
+     * Enums for all possible valid commands that are allowed to be supplied by the user.
+     */
+    private enum CommandNames {
+        LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
     }
 
     public abstract void execute(TextUi ui, TaskList taskList) throws DukeException;
