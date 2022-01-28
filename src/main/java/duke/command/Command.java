@@ -28,7 +28,7 @@ public abstract class Command {
     /**
      * Enums for all possible valid commands that are allowed to be supplied by the user.
      */
-    public enum CommandNames {
+    private enum CommandNames {
         LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
     }
 

@@ -16,7 +16,6 @@ public class ByeCommand extends Command {
      */
     @Override
     public void execute(TextUi ui, TaskList taskList) {
-
     }
 
     /**
