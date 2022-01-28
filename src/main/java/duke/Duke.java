@@ -7,11 +7,21 @@ import duke.usertask.TaskList;
 
 import java.io.IOException;
 
+/**
+ * Duke is a chat-bot program that is capable of logging tasks which are (optionally)
+ * tagged with a deadline/occurrence date.
+ * <p>
+ * Duke automatically saves the tasks of each session upon successful termination
+ * of the session, and restores these tasks on the next launch.
+ */
 public class Duke {
     private final TaskList tasks;
     private final TextUi ui;
     private SaveHandler sv = null;
 
+    /**
+     * Begins execution of the Duke chat-bot.
+     */
     public void run() {
         ui.printGreeting();
         if (sv != null) {
@@ -41,12 +51,15 @@ public class Duke {
         }
     }
 
+    /**
+     * Creates a new Duke chat-bot instance.
+     */
     public Duke() {
         this.ui = new TextUi();
         try {
             this.sv = new SaveHandler();
         } catch (IOException e) {
-            System.out.println(e.getMessage()); // TODO: explicitly handle IOException
+            System.out.println(e.getMessage());
         }
         this.tasks = new TaskList(100);
     }
