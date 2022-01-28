@@ -29,7 +29,7 @@ public abstract class Command {
      * Enums for all possible valid commands that are allowed to be supplied by the user.
      */
     private enum CommandNames {
-        LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
+        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
     }
 
     /**
@@ -93,6 +93,11 @@ public abstract class Command {
                         "Please ensure it is of the following format: " +
                         DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
             }
+        case FIND:
+            if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
+                throw new DukeException("Please indicate a valid word to match the task names.");
+            }
+            return new FindCommand(userInputSplit[1]);
         case MARK:
             if (userInputSplit.length == 1) {
                 throw new DukeException("Please indicate a task item number to mark");

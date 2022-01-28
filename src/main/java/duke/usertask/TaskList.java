@@ -5,6 +5,7 @@ import duke.DukeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class TaskList implements DukeSavable {
@@ -44,6 +45,16 @@ public class TaskList implements DukeSavable {
             task.setDone();
         }
         this.tasks.add(task);
+    }
+
+    public TaskList filterByName(String taskName) {
+        TaskList filteredTaskList = new TaskList(100);
+        filteredTaskList.tasks.addAll(
+                this.tasks.subList(1, tasks.size())
+                        .stream()
+                        .filter((task) -> task.nameContains(taskName))
+                        .collect(Collectors.toList()));
+        return filteredTaskList;
     }
 
     public TaskList filterByDate(LocalDateTime date) throws DukeException {
