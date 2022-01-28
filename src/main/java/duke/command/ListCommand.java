@@ -30,7 +30,7 @@ public class ListCommand extends Command {
         }
         ui.printFromRed("Alright, here are your tasks.\n");
         ui.printWithBuffer("----------\n");
-        ui.printWithBuffer("TOTAL: " + listItems.size() + " tasks\n");
+        ui.printWithBuffer("TOTAL: " + (taskList.getTasksCount() == 0 ? "0" : listItems.size()) + " tasks\n");
         ui.printWithBuffer("----------\n");
         listItems.forEach((item) -> ui.printWithBuffer(item + "\n"));
         ui.printWithBuffer("----------\n");
