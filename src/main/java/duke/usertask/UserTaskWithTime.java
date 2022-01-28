@@ -46,6 +46,7 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
 
     @Override
     public String toString() {
-        return "%s" + super.toString() + " (%s: " + Utils.formatLocalDateTime(this.dateTime, TO_DISPLAY_DATE_TIME_FORMATTER) + ")";
+        return "%s" + super.toString() +
+                " (%s: " + Utils.formatLocalDateTime(this.dateTime, TO_DISPLAY_DATE_TIME_FORMATTER) + ")";
     }
 }
