@@ -14,7 +14,7 @@ import static duke.utils.Utils.TIME_FORMAT;
 
 public abstract class Command {
     public enum CommandNames {
-        LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE;
+        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE;
     }
 
     public abstract void execute(TextUi ui, TaskList taskList) throws DukeException;
@@ -53,6 +53,11 @@ public abstract class Command {
                         "Please ensure it is of the following format: " +
                         DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
             }
+        case FIND:
+            if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
+                throw new DukeException("Please indicate a valid word to match the task names.");
+            }
+            return new FindCommand(userInputSplit[1]);
         case MARK:
             if (userInputSplit.length == 1) {
                 throw new DukeException("Please indicate a task item number to mark");

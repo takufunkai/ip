@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ListCommand extends Command {
     private LocalDateTime dateFilter = null;
+    private String listMessage = "Alright, here are your tasks.";
 
     public ListCommand() {
 
@@ -17,6 +18,11 @@ public class ListCommand extends Command {
 
     public ListCommand(LocalDateTime date) {
         this.dateFilter = date;
+        this.listMessage = listMessage + "for the date: " + date.toString();
+    }
+
+    public void changeListMessage(String message) {
+        this.listMessage = message;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class ListCommand extends Command {
             TaskList filteredTaskList = taskList.filterByDate(dateFilter);
             listItems = Arrays.asList(filteredTaskList.toString().split("\n"));
         }
-        ui.printFromRed("Alright, here are your tasks.\n");
+        ui.printFromRed(this.listMessage + "\n");
         ui.printWithBuffer("----------\n");
         ui.printWithBuffer("TOTAL: " + listItems.size() + " tasks\n");
         ui.printWithBuffer("----------\n");

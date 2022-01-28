@@ -5,6 +5,7 @@ import duke.DukeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class TaskList implements DukeSavable {
@@ -46,13 +47,14 @@ public class TaskList implements DukeSavable {
         this.tasks.add(task);
     }
 
-    @Override
-    public String toDukeSaveFormat() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < tasks.size(); i++) {
-            sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
-        }
-        return sb.toString();
+    public TaskList filterByName(String taskName) {
+        TaskList filteredTaskList = new TaskList(100);
+        filteredTaskList.tasks.addAll(
+                this.tasks.subList(1, tasks.size())
+                        .stream()
+                        .filter((task) -> task.nameContains(taskName))
+                        .collect(Collectors.toList()));
+        return filteredTaskList;
     }
 
     public TaskList filterByDate(LocalDateTime date) throws DukeException {
@@ -68,6 +70,15 @@ public class TaskList implements DukeSavable {
             throw new DukeException("Failed to get filtered tasks: " + e.getMessage());
         }
         return filteredTaskList;
+    }
+
+    @Override
+    public String toDukeSaveFormat() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < tasks.size(); i++) {
+            sb.append(tasks.get(i).toDukeSaveFormat()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
