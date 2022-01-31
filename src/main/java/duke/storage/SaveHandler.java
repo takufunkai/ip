@@ -11,6 +11,7 @@ import duke.usertask.Deadline;
 import duke.usertask.Event;
 import duke.usertask.TaskList;
 import duke.usertask.ToDo;
+import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
 
 /**
@@ -77,16 +78,18 @@ public class SaveHandler {
                 }
                 String taskName = parsedTask[2];
                 boolean isDone = parsedTask[1].equals("1");
+
+                UserTask newTask;
                 try {
                     switch (code) {
                     case T:
-                        emptyTasks.addTask(new ToDo(taskName), isDone);
+                        newTask = new ToDo(taskName);
                         break;
                     case D:
-                        emptyTasks.addTask(new Deadline(taskName, parsedTask[3]), isDone);
+                        newTask = new Deadline(taskName, parsedTask[3]);
                         break;
                     case E:
-                        emptyTasks.addTask(new Event(taskName, parsedTask[3]), isDone);
+                        newTask = new Event(taskName, parsedTask[3]);
                         break;
                     default:
                         throw new DukeException("Unknown task type for saved item.");
@@ -94,6 +97,11 @@ public class SaveHandler {
                 } catch (UserTaskException e) {
                     throw new DukeException("Failed to restore save file: " + e.getMessage());
                 }
+
+                if (isDone) {
+                    newTask.setDone();
+                }
+                emptyTasks.addTask(newTask);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Failed to load save-file: " + e.getMessage());

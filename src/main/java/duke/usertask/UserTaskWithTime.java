@@ -6,10 +6,12 @@ import java.time.format.DateTimeFormatter;
 
 import duke.utils.Utils;
 
-public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
+/**
+ * The UserTaskWithTime class encapsulates Tasks that have some dateTime associated with them.
+ */
+public abstract class UserTaskWithTime extends UserTask {
     private static final DateTimeFormatter TO_DISPLAY_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a");
-
     private final LocalDateTime dateTime;
 
     UserTaskWithTime(String name, String dateTime) throws UserTaskException {
@@ -26,6 +28,14 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
         }
     }
 
+    /**
+     * Checks if the UserTaskWithTime's associated dateTime is equal to the given date. Equality is determined by
+     * whether they fall on the same calendar date, regardless of time.
+     *
+     * @param date The date to match this object against.
+     * @return True if the date of this object is the same as the specified date, false if otherwise.
+     * @throws UserTaskException If the specified date is of the wrong format.
+     */
     public boolean isDated(LocalDateTime date) throws UserTaskException {
         try {
             return this.dateTime.toLocalDate().isEqual(date.toLocalDate());
@@ -36,11 +46,19 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Adds its dateTime in string Duke savable format to the DukeSaveFormat string.
+     */
     @Override
     public String toDukeSaveFormat() {
         return super.toDukeSaveFormat() + "|" + Utils.formatLocalDateTime(this.dateTime);
     }
 
+    /**
+     * {@inheritDoc}
+     * Add its current dateTime to the display string.
+     */
     @Override
     public String toString() {
         return "%s" + super.toString()
