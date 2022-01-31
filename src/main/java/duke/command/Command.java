@@ -1,16 +1,17 @@
 package duke.command;
 
-import duke.DukeException;
-import duke.textui.TextUi;
-import duke.usertask.TaskList;
-import duke.utils.Utils;
+import static duke.utils.Utils.DATE_FORMAT;
+import static duke.utils.Utils.TIME_FORMAT;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
-import static duke.utils.Utils.DATE_FORMAT;
-import static duke.utils.Utils.TIME_FORMAT;
+import duke.DukeException;
+import duke.textui.TextUi;
+import duke.usertask.TaskList;
+import duke.utils.Utils;
+
 
 /**
  * <code>Command</code> is the abstract base class for all possible commands that <code>Duke</code> recognizes.
@@ -89,9 +90,9 @@ public abstract class Command {
                 LocalDateTime filterDate = Utils.parseToLocalDateTime(listArgs[1]);
                 return new ListCommand(filterDate);
             } catch (DateTimeParseException e) {
-                throw new DukeException(String.format("Failed to parse date %s. " +
-                        "Please ensure it is of the following format: " +
-                        DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
+                throw new DukeException(String.format("Failed to parse date %s. "
+                        + "Please ensure it is of the following format: "
+                        + DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
             }
         case FIND:
             if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
@@ -106,8 +107,8 @@ public abstract class Command {
             try {
                 taskNumber = Integer.parseInt(userInputSplit[1]);
             } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! " +
-                        "Please input a valid number.");
+                throw new DukeException("Your tasks are identified by numbers! "
+                        + "Please input a valid number.");
             }
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");
@@ -120,8 +121,8 @@ public abstract class Command {
             try {
                 taskNumber = Integer.parseInt(userInputSplit[1]);
             } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! " +
-                        "Please input a valid number.");
+                throw new DukeException("Your tasks are identified by numbers! "
+                        + "Please input a valid number.");
             }
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");
@@ -134,8 +135,8 @@ public abstract class Command {
             try {
                 taskNumber = Integer.parseInt(userInputSplit[1]);
             } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! " +
-                        "Please input a valid number.");
+                throw new DukeException("Your tasks are identified by numbers! "
+                        + "Please input a valid number.");
             }
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");

@@ -1,12 +1,11 @@
 package duke.usertask;
 
-import duke.DukeException;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import duke.DukeException;
 
 public class TaskList implements DukeSavable {
     private final List<UserTask> tasks;
@@ -61,8 +60,8 @@ public class TaskList implements DukeSavable {
         TaskList filteredTaskList = new TaskList(100);
         try {
             for (UserTask currTask : tasks) {
-                if (currTask instanceof UserTaskWithTime &&
-                        ((UserTaskWithTime) currTask).isDated(date)) {
+                if (currTask instanceof UserTaskWithTime
+                        && ((UserTaskWithTime) currTask).isDated(date)) {
                     filteredTaskList.addTask(currTask);
                 }
             }

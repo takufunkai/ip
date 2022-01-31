@@ -1,11 +1,11 @@
 package duke;
 
+import java.io.IOException;
+
 import duke.command.Command;
 import duke.storage.SaveHandler;
 import duke.textui.TextUi;
 import duke.usertask.TaskList;
-
-import java.io.IOException;
 
 /**
  * Duke is a chat-bot program that is capable of logging tasks which are (optionally)
@@ -18,6 +18,19 @@ public class Duke {
     private final TaskList tasks;
     private final TextUi ui;
     private SaveHandler sv = null;
+
+    /**
+     * Creates a new Duke chat-bot instance.
+     */
+    private Duke() {
+        this.ui = new TextUi();
+        try {
+            this.sv = new SaveHandler();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        this.tasks = new TaskList(100);
+    }
 
     /**
      * Begins execution of the Duke chat-bot.
@@ -49,19 +62,6 @@ public class Duke {
         if (sv != null) {
             sv.save(tasks);
         }
-    }
-
-    /**
-     * Creates a new Duke chat-bot instance.
-     */
-    public Duke() {
-        this.ui = new TextUi();
-        try {
-            this.sv = new SaveHandler();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        this.tasks = new TaskList(100);
     }
 
     public static void main(String[] args) {

@@ -1,13 +1,17 @@
 package duke.storage;
 
-import duke.DukeException;
-import duke.usertask.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
+import duke.DukeException;
+import duke.usertask.Deadline;
+import duke.usertask.Event;
+import duke.usertask.TaskList;
+import duke.usertask.ToDo;
+import duke.usertask.UserTaskException;
 
 /**
  * SaveHandler is the class that handles all storage-related information and methods of the Duke chat-bot.
@@ -16,8 +20,8 @@ import java.util.Scanner;
  * the saved strings.
  */
 public class SaveHandler {
-    private final static String DATA_DIRECTORY = "data";
-    private final static String DATA_FILEPATH = DATA_DIRECTORY + "/duke.txt";
+    private static final String DATA_DIRECTORY = "data";
+    private static final String DATA_FILEPATH = DATA_DIRECTORY + "/duke.txt";
 
     enum TaskCode {
         T, D, E

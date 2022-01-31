@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public final class Utils {
-    public final static String DATE_FORMAT = "dd-MM-yyyy";
-    public final static String TIME_FORMAT = "HH:mm";
-    private final static DateTimeFormatter COMMAND_DATE_FORMATTER =
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final String TIME_FORMAT = "HH:mm";
+    private static final DateTimeFormatter COMMAND_DATE_FORMATTER =
             DateTimeFormatter.ofPattern(DATE_FORMAT);
-    private final static DateTimeFormatter COMMAND_DATE_TIME_FORMATTER =
+    private static final DateTimeFormatter COMMAND_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern(DATE_FORMAT + " " + TIME_FORMAT);
 
     public static String colourStringRed(String out) {
-        String ANSI_RED = "\u001B[31m";
-        String ANSI_RESET = "\u001B[0m";
-        return ANSI_RED + out + ANSI_RESET;
+        String ansiRed = "\u001B[31m";
+        String ansiReset = "\u001B[0m";
+        return ansiRed + out + ansiReset;
     }
 
     public static String formatLocalDateTime(LocalDateTime ldt) {

@@ -1,12 +1,12 @@
 package duke.command;
 
-import duke.DukeException;
-import duke.textui.TextUi;
-import duke.usertask.TaskList;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import duke.DukeException;
+import duke.textui.TextUi;
+import duke.usertask.TaskList;
 
 /**
  * ListCommand handles outputting the entire list of tasks that a user has at the current point in time.

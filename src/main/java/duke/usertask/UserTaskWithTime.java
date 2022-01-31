@@ -1,16 +1,13 @@
 package duke.usertask;
 
-import duke.utils.Utils;
-
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static duke.utils.Utils.DATE_FORMAT;
-import static duke.utils.Utils.TIME_FORMAT;
+import duke.utils.Utils;
 
 public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
-    private final static DateTimeFormatter TO_DISPLAY_DATE_TIME_FORMATTER =
+    private static final DateTimeFormatter TO_DISPLAY_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a");
 
     private final LocalDateTime dateTime;
@@ -23,9 +20,9 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
                     ? Utils.parseToLocalDateTime(dateTimeSplit[0], dateTimeSplit[1])
                     : Utils.parseToLocalDateTime(dateTimeSplit[0]);
         } catch (DateTimeException e) {
-            throw new UserTaskException("Unable to parse date-time. " +
-                    "Please ensure it is of the following format: " +
-                    DATE_FORMAT + " " + TIME_FORMAT);
+            throw new UserTaskException("Unable to parse date-time. "
+                    + "Please ensure it is of the following format: "
+                    + Utils.DATE_FORMAT + " " + Utils.TIME_FORMAT);
         }
     }
 
@@ -33,9 +30,9 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
         try {
             return this.dateTime.toLocalDate().isEqual(date.toLocalDate());
         } catch (DateTimeException e) {
-            throw new UserTaskException("Unable to parse date. " +
-                    "Please ensure it is of the following format: " +
-                    DATE_FORMAT);
+            throw new UserTaskException("Unable to parse date. "
+                    + "Please ensure it is of the following format: "
+                    + Utils.DATE_FORMAT);
         }
     }
 
@@ -46,7 +43,7 @@ public abstract class UserTaskWithTime extends UserTask implements DukeSavable {
 
     @Override
     public String toString() {
-        return "%s" + super.toString() +
-                " (%s: " + Utils.formatLocalDateTime(this.dateTime, TO_DISPLAY_DATE_TIME_FORMATTER) + ")";
+        return "%s" + super.toString()
+                + " (%s: " + Utils.formatLocalDateTime(this.dateTime, TO_DISPLAY_DATE_TIME_FORMATTER) + ")";
     }
 }
