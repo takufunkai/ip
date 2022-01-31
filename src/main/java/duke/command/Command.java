@@ -151,7 +151,7 @@ public abstract class Command {
             if (userInputSplit.length == 1) {
                 throw new DukeException("Deadline items must have a description and due date.\n");
             }
-            String[] parsedInput = input.split(" /by ");
+            String[] parsedInput = userInputSplit[1].split(" /by ");
             if (parsedInput.length != 2) {
                 throw new DukeException("Deadline items must have a description and due date.\n");
             }
@@ -162,7 +162,7 @@ public abstract class Command {
             if (userInputSplit.length == 1) {
                 throw new DukeException("Event items must have a description and date.\n");
             }
-            parsedInput = input.split(" /at ");
+            parsedInput = userInputSplit[1].split(" /at ");
             if (parsedInput.length != 2) {
                 throw new DukeException("Event items must have a description and date.\n");
             }
