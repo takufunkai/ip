@@ -26,7 +26,13 @@ public class Duke {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
         this.tasks = new TaskList(100);
+        try {
+            sv.restore(tasks);
+        } catch (DukeException e) {
+            System.out.println("Failed to restore saved tasks: " + e.getMessage());
+        }
     }
 
     public String getGreeting() {
@@ -42,6 +48,7 @@ public class Duke {
     public String getResponse(String input) throws DukeException {
         Command cmd = Command.parse(input);
         if (cmd.isExit()) {
+            sv.save(tasks);
             return "EXIT";
         }
         return cmd.execute(tasks);
