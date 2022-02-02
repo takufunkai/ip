@@ -17,15 +17,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
-            AnchorPane ap = fxmlLoader.load();
-            Scene scene = new Scene(ap);
-            stage.setScene(scene);
-            fxmlLoader.<MainWindow>getController().setDuke(duke);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MainWindow mw = new MainWindow();
+        Scene scene = new Scene(mw);
+        stage.setScene(scene);
+        mw.setDuke(duke);
+        stage.show();
     }
 }
