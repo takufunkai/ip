@@ -1,7 +1,6 @@
 package duke.command;
 
 import duke.DukeException;
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 import duke.usertask.UserTask;
 
@@ -26,17 +25,16 @@ public class DeleteCommand extends Command {
      * Deletes the task from the list of tasks given by <code>Duke</code>. If the index does not yet exist,
      * <code>execute</code> will return an error, stating that the index does not exist.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
+     * @return
      */
     @Override
-    public void execute(TextUi ui, TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList) throws DukeException {
         if (index > taskList.getTasksCount()) {
             throw new DukeException("The task you are attempting to delete does not exist");
         }
         UserTask delTask = taskList.deleteTask(index);
-        ui.printFromRed("Alright! Getting rid of the following task: \n");
-        ui.printFromRed(delTask + "\n");
+        return "Alright! Getting rid of the following task: \n" + delTask + "\n";
     }
 }

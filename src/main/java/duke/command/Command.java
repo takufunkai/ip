@@ -8,7 +8,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import duke.DukeException;
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 import duke.utils.Utils;
 
@@ -37,11 +36,11 @@ public abstract class Command {
      * Runs the expected behaviour of the specific command. We can assume that command-specific
      * arguments have been supplied during the instantiation of the <code>Command</code> subclass object.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
      * @throws DukeException Thrown if some invalid command was given, or the supplied arguments are invalid.
+     * @return
      */
-    public abstract void execute(TextUi ui, TaskList taskList) throws DukeException;
+    public abstract String execute(TaskList taskList) throws DukeException;
 
     /**
      * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to

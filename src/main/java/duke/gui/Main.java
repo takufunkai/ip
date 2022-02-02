@@ -1,11 +1,9 @@
-package duke;
+package duke.gui;
 
-import java.io.IOException;
-
+import duke.Duke;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -14,13 +12,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Duke duke = new Duke();
+    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/red_default.png"));
 
     @Override
     public void start(Stage stage) {
-        MainWindow mw = new MainWindow();
+        MainWindow mw = new MainWindow(stage);
         Scene scene = new Scene(mw);
         stage.setScene(scene);
         mw.setDuke(duke);
         stage.show();
+
+        stage.setTitle("Duke");
+        stage.getIcons().add(dukeImage);
     }
 }

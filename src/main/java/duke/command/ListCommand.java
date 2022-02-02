@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import duke.DukeException;
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 
 /**
@@ -44,12 +43,12 @@ public class ListCommand extends Command {
      * are printed out at the top of the table. If this object has some <code>dateFilter</code>, the tasks outputted
      * will be filtered based on the dateFilter supplied.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
      * @throws DukeException Thrown if the filter did not succeed.
+     * @return
      */
     @Override
-    public void execute(TextUi ui, TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList) throws DukeException {
         List<String> listItems;
         if (this.dateFilter == null) {
             listItems = Arrays.asList(taskList.toString().split("\n"));
@@ -57,11 +56,12 @@ public class ListCommand extends Command {
             TaskList filteredTaskList = taskList.filterByDate(dateFilter);
             listItems = Arrays.asList(filteredTaskList.toString().split("\n"));
         }
-        ui.printFromRed(this.listMessage + "\n");
-        ui.printWithBuffer("----------\n");
-        ui.printWithBuffer("TOTAL: " + (taskList.getTasksCount() == 0 ? "0" : listItems.size()) + " tasks\n");
-        ui.printWithBuffer("----------\n");
-        listItems.forEach((item) -> ui.printWithBuffer(item + "\n"));
-        ui.printWithBuffer("----------\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.listMessage)
+                .append("\n----------\nTOTAL: ")
+                .append(taskList.getTasksCount() == 0 ? "0" : listItems.size())
+                .append(" tasks\n----------\n");
+        listItems.forEach((item) -> sb.append(item).append("\n"));
+        return sb.toString();
     }
 }

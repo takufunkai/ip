@@ -1,6 +1,5 @@
 package duke.command;
 
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 
 /**
@@ -11,11 +10,12 @@ public class ByeCommand extends Command {
     /**
      * Does nothing, as it has no execution.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
+     * @return
      */
     @Override
-    public void execute(TextUi ui, TaskList taskList) {
+    public String execute(TaskList taskList) {
+        return "";
     }
 
     /**
