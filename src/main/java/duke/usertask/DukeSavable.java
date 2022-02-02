@@ -1,5 +1,5 @@
 package duke.usertask;
 
-interface DukeSavable {
+public interface DukeSavable {
     String toDukeSaveFormat();
 }

@@ -19,18 +19,6 @@ public final class Utils {
             DateTimeFormatter.ofPattern(DATE_FORMAT + " " + TIME_FORMAT);
 
     /**
-     * Returns the specified string in red colour.
-     *
-     * @param s The string to be coloured red.
-     * @return Returns the specified string in red colour.
-     */
-    public static String colourStringRed(String s) {
-        String ansiRed = "\u001B[31m";
-        String ansiReset = "\u001B[0m";
-        return ansiRed + s + ansiReset;
-    }
-
-    /**
      * Returns the string representation of the specified LocalDateTime, formatted by the specified formatter.
      *
      * @param ldt The LocalDateTime object to format to string.

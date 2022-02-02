@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import duke.DukeException;
 import duke.usertask.Deadline;
+import duke.usertask.DukeSavable;
 import duke.usertask.Event;
 import duke.usertask.TaskList;
 import duke.usertask.ToDo;
@@ -58,10 +59,17 @@ public class SaveHandler {
         }
     }
 
-    public void save(UserTask task) {
+    /**
+     * Saves the list of tasks specified to the storage. The existing storage data is overwritten.
+     *
+     * @param tasks List of tasks to save.
+     */
+    public void save(DukeSavable ...tasks) {
         try {
             FileWriter fw = new FileWriter(DATA_FILEPATH);
-            fw.append(task.toDukeSaveFormat());
+            for (DukeSavable t : tasks) {
+                fw.append(t.toDukeSaveFormat());
+            }
             fw.close();
         } catch (IOException e) {
             System.out.println("Failed to save data: " + e.getMessage());
