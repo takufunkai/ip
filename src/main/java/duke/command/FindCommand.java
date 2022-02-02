@@ -1,7 +1,6 @@
 package duke.command;
 
 import duke.DukeException;
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 
 public class FindCommand extends Command {
@@ -12,10 +11,10 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TextUi ui, TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList) throws DukeException {
         TaskList filteredTaskList = taskList.filterByName(this.search);
         ListCommand lc = new ListCommand();
         lc.changeListMessage("Alright, here are your matching tasks: ");
-        lc.execute(ui, filteredTaskList);
+        return lc.execute(filteredTaskList);
     }
 }

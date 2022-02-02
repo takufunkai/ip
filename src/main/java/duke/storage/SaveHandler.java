@@ -51,7 +51,17 @@ public class SaveHandler {
     public void save(TaskList tasks) {
         try {
             FileWriter fw = new FileWriter(DATA_FILEPATH);
-            fw.write(tasks.toDukeSaveFormat());
+            fw.append(tasks.toDukeSaveFormat());
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Failed to save data: " + e.getMessage());
+        }
+    }
+
+    public void save(UserTask task) {
+        try {
+            FileWriter fw = new FileWriter(DATA_FILEPATH);
+            fw.append(task.toDukeSaveFormat());
             fw.close();
         } catch (IOException e) {
             System.out.println("Failed to save data: " + e.getMessage());
@@ -103,7 +113,7 @@ public class SaveHandler {
                 }
                 emptyTasks.addTask(newTask);
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException | DukeException e) {
             System.out.println("Failed to load save-file: " + e.getMessage());
         }
     }

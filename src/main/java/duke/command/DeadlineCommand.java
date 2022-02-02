@@ -1,7 +1,6 @@
 package duke.command;
 
 import duke.DukeException;
-import duke.textui.TextUi;
 import duke.usertask.Deadline;
 import duke.usertask.TaskList;
 import duke.usertask.UserTask;
@@ -30,16 +29,16 @@ public class DeadlineCommand extends Command {
     /**
      * Creates a new Deadline task object, and adds it to the current task list being maintained by <code>Duke</code>.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
      * @throws DukeException Thrown if Deadline object was unsuccessfully created.
+     * @return
      */
     @Override
-    public void execute(TextUi ui, TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList) throws DukeException {
         try {
             UserTask task = new Deadline(description, deadlineDateTime);
             taskList.addTask(task);
-            ui.printFromRed("Added task #" + (taskList.getTasksCount()) + ": " + task + "\n");
+            return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
         } catch (UserTaskException e) {
             throw new DukeException("Failed to create new deadline item: " + e.getMessage());
         }

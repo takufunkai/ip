@@ -1,6 +1,5 @@
 package duke.command;
 
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 import duke.usertask.ToDo;
 import duke.usertask.UserTask;
@@ -25,13 +24,13 @@ public class ToDoCommand extends Command {
     /**
      * Creates a new ToDo task object, and adds it to the current task list being maintained by <code>Duke</code>.
      *
-     * @param ui       The <code>TextUi</code> object being used by <code>Duke</code>.
      * @param taskList The <code>TaskList</code> of the current user.
+     * @return
      */
     @Override
-    public void execute(TextUi ui, TaskList taskList) {
+    public String execute(TaskList taskList) {
         UserTask task = new ToDo(description);
         taskList.addTask(task);
-        ui.printFromRed("Added task #" + (taskList.getTasksCount()) + ": " + task + "\n");
+        return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
     }
 }

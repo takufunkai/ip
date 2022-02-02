@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import duke.command.Command;
 import duke.storage.SaveHandler;
-import duke.textui.TextUi;
 import duke.usertask.TaskList;
 
 /**
@@ -16,55 +15,42 @@ import duke.usertask.TaskList;
  */
 public class Duke {
     private final TaskList tasks;
-    private final TextUi ui;
     private SaveHandler sv = null;
 
     /**
      * Creates a new Duke chat-bot instance.
      */
-    private Duke() {
-        this.ui = new TextUi();
+    public Duke() {
         try {
             this.sv = new SaveHandler();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
         this.tasks = new TaskList(100);
+        try {
+            sv.restore(tasks);
+        } catch (DukeException e) {
+            System.out.println("Failed to restore saved tasks: " + e.getMessage());
+        }
+    }
+
+    public String getGreeting() {
+        return "Hello, I am Red from Among Us.\n\nWe are currently facing a crisis onboard -- there seems to be an "
+                + "imposter among us...\n\nMy job is to handle chat requests, so although I might get murdered any "
+                + "moment now...\n\n... How can I help you?";
     }
 
     /**
-     * Begins execution of the Duke chat-bot.
+     * You should have your own function to generate a response to user input.
+     * Replace this stub with your completed method.
      */
-    public void run() {
-        ui.printGreeting();
-        if (sv != null) {
-            try {
-                sv.restore(tasks);
-            } catch (DukeException e) {
-                ui.printFromRed("Oops, something went wrong: " + "\n");
-                ui.printFromRed("** " + e.getMessage() + "\n");
-            }
-        }
-        boolean isRunning = true;
-        while (isRunning) {
-            try {
-                String userInput = ui.awaitInputFromUser();
-                Command cmd = Command.parse(userInput);
-                cmd.execute(ui, tasks);
-                ui.printWithBuffer("\n");
-                isRunning = !cmd.isExit();
-            } catch (DukeException e) {
-                ui.printFromRed("Oops, something went wrong: " + "\n");
-                ui.printFromRed("** " + e.getMessage() + "\n");
-            }
-        }
-        ui.printExitMessage();
-        if (sv != null) {
+    public String getResponse(String input) throws DukeException {
+        Command cmd = Command.parse(input);
+        if (cmd.isExit()) {
             sv.save(tasks);
+            return "EXIT";
         }
-    }
-
-    public static void main(String[] args) {
-        new Duke().run();
+        return cmd.execute(tasks);
     }
 }
