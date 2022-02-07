@@ -35,7 +35,9 @@ public class DialogBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         dialog.setText(text);
+
         displayPicture.setImage(img);
         double imgCenter = displayPicture.getFitHeight() / 2;
         displayPicture.setClip(new Circle(imgCenter, imgCenter, imgCenter));
@@ -48,6 +50,7 @@ public class DialogBox extends HBox {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
+
         dialog.setAlignment(Pos.BASELINE_LEFT);
         setAlignment(Pos.TOP_LEFT);
     }
