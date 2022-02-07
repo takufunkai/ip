@@ -15,21 +15,21 @@ import duke.usertask.TaskList;
  */
 public class Duke {
     private final TaskList tasks;
-    private SaveHandler sv = null;
+    private SaveHandler saveHandler = null;
 
     /**
      * Creates a new Duke chat-bot instance.
      */
     public Duke() {
         try {
-            this.sv = new SaveHandler();
+            this.saveHandler = new SaveHandler();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
         this.tasks = new TaskList(100);
         try {
-            sv.restore(tasks);
+            this.saveHandler.restore(tasks);
         } catch (DukeException e) {
             System.out.println("Failed to restore saved tasks: " + e.getMessage());
         }
@@ -48,9 +48,8 @@ public class Duke {
     public String getResponse(String input) throws DukeException {
         Command cmd = Command.parse(input);
         if (cmd.isExit()) {
-            sv.save(tasks);
             return "EXIT";
         }
-        return cmd.execute(tasks);
+        return cmd.execute(this.tasks, this.saveHandler);
     }
 }

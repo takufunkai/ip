@@ -1,6 +1,7 @@
 package duke.command;
 
 import duke.DukeException;
+import duke.storage.SaveHandler;
 import duke.usertask.Deadline;
 import duke.usertask.TaskList;
 import duke.usertask.UserTask;
@@ -28,16 +29,18 @@ public class DeadlineCommand extends Command {
 
     /**
      * Creates a new Deadline task object, and adds it to the current task list being maintained by <code>Duke</code>.
+     * Adds the task to the SaveHandler.
      *
      * @param taskList The <code>TaskList</code> of the current user.
+     * @param saveHandler The SaveHandler used by duke.
      * @throws DukeException Thrown if Deadline object was unsuccessfully created.
-     * @return
      */
     @Override
-    public String execute(TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
         try {
             UserTask task = new Deadline(description, deadlineDateTime);
             taskList.addTask(task);
+            saveHandler.save(task);
             return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
         } catch (UserTaskException e) {
             throw new DukeException("Failed to create new deadline item: " + e.getMessage());

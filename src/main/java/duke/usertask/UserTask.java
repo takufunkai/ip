@@ -7,12 +7,17 @@ import java.util.Locale;
  * such as the name and isDone status of the task. It provides several methods to update the state of the task.
  */
 public abstract class UserTask implements DukeSavable {
+    private static int saveIdSerial = 0;
+
     private final String name;
     private boolean isDone;
+    private final int saveId;
 
     UserTask(String name) {
         this.name = name;
         this.isDone = false;
+        this.saveId = saveIdSerial;
+        saveIdSerial++;
     }
 
     /**
@@ -46,7 +51,7 @@ public abstract class UserTask implements DukeSavable {
      */
     @Override
     public String toDukeSaveFormat() {
-        return "%s|" + (isDone ? "1" : "0") + "|" + name;
+        return this.saveId + "|%s|" + (isDone ? "1" : "0") + "|" + name;
     }
 
     /**
