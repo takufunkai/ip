@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import duke.DukeException;
+import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 
 /**
@@ -44,11 +45,11 @@ public class ListCommand extends Command {
      * will be filtered based on the dateFilter supplied.
      *
      * @param taskList The <code>TaskList</code> of the current user.
+     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if the filter did not succeed.
-     * @return
      */
     @Override
-    public String execute(TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
         List<String> listItems;
         if (this.dateFilter == null) {
             listItems = Arrays.asList(taskList.toString().split("\n"));

@@ -1,5 +1,6 @@
 package duke.command;
 
+import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 
 /**
@@ -11,10 +12,10 @@ public class ByeCommand extends Command {
      * Does nothing, as it has no execution.
      *
      * @param taskList The <code>TaskList</code> of the current user.
-     * @return
+     * @param saveHandler The SaveHandler used by Duke.
      */
     @Override
-    public String execute(TaskList taskList) {
+    public String execute(TaskList taskList, SaveHandler saveHandler) {
         return "";
     }
 

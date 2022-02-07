@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import duke.DukeException;
+import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 import duke.utils.Utils;
 
@@ -37,10 +38,10 @@ public abstract class Command {
      * arguments have been supplied during the instantiation of the <code>Command</code> subclass object.
      *
      * @param taskList The <code>TaskList</code> of the current user.
+     * @param saveHandler The SaveHandler from the Duke application.
      * @throws DukeException Thrown if some invalid command was given, or the supplied arguments are invalid.
-     * @return
      */
-    public abstract String execute(TaskList taskList) throws DukeException;
+    public abstract String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException;
 
     /**
      * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to
@@ -64,17 +65,17 @@ public abstract class Command {
      * @throws DukeException Thrown if arguments supplied are invalid.
      */
     public static Command parse(String input) throws DukeException {
-        if (input.isBlank()) {
-            throw new DukeException("No command was given. Please specify a valid command!");
-        }
+        assert !input.isBlank() : "Input given should not be blank";
+
         String[] userInputSplit = input.split("\\s+", 2);
-        CommandNames cmd;
+        CommandNames command;
         try {
-            cmd = CommandNames.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
+            command = CommandNames.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new DukeException("I don't know what " + userInputSplit[0] + " means.");
+            throw new DukeException(String.format("I don't know what \"%s\" means", userInputSplit[0]));
         }
-        switch (cmd) {
+
+        switch (command) {
         case BYE:
             return new ByeCommand();
         case LIST:
