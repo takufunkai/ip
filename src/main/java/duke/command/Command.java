@@ -67,45 +67,57 @@ public abstract class Command {
     public static Command parse(String input) throws DukeException {
         assert !input.isBlank() : "Input given should not be blank";
 
-        String[] userInputSplit = input.split("\\s+", 2);
+        String[] inputStrings = input.split("\\s+", 2);
+        boolean noArgumentsSupplied = inputStrings.length == 1;
+        String specifiedCommand = inputStrings[0];
+
         CommandNames command;
         try {
-            command = CommandNames.valueOf(userInputSplit[0].toUpperCase(Locale.ROOT));
+            command = CommandNames.valueOf(specifiedCommand.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new DukeException(String.format("I don't know what \"%s\" means", userInputSplit[0]));
+            throw new DukeException("I don't know what " + specifiedCommand + " means.");
         }
 
         switch (command) {
         case BYE:
             return new ByeCommand();
         case LIST:
-            if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
+            if (noArgumentsSupplied || inputStrings[1].isBlank()) {
                 return new ListCommand();
             }
-            String[] listArgs = userInputSplit[1].split(" ");
-            if (!listArgs[0].equalsIgnoreCase("date") || listArgs.length == 1) {
+
+            String[] listCommandArguments = inputStrings[1].split(" ");
+            if (listCommandArguments.length == 1) {
+                throw new DukeException("Insufficient parameters supplied!");
+            }
+
+            String delimiter = listCommandArguments[0];
+            if (!delimiter.equalsIgnoreCase("/date")) {
                 throw new DukeException("Unknown parameter supplied to list command.");
             }
+
             try {
-                LocalDateTime filterDate = Utils.parseToLocalDateTime(listArgs[1]);
+                LocalDateTime filterDate = Utils.parseToLocalDateTime(listCommandArguments[1]);
                 return new ListCommand(filterDate);
             } catch (DateTimeParseException e) {
                 throw new DukeException(String.format("Failed to parse date %s. "
                         + "Please ensure it is of the following format: "
-                        + DATE_FORMAT + " " + TIME_FORMAT, listArgs[1]));
+                        + DATE_FORMAT + " " + TIME_FORMAT, listCommandArguments[1]));
             }
         case FIND:
-            if (userInputSplit.length == 1 || userInputSplit[1].isBlank()) {
+            if (noArgumentsSupplied || inputStrings[1].isBlank()) {
                 throw new DukeException("Please indicate a valid word to match the task names.");
             }
-            return new FindCommand(userInputSplit[1]);
+
+            return new FindCommand(inputStrings[1]);
         case MARK:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("Please indicate a task item number to mark");
             }
+
             int taskNumber;
             try {
-                taskNumber = Integer.parseInt(userInputSplit[1]);
+                taskNumber = Integer.parseInt(inputStrings[1]);
             } catch (NumberFormatException e) {
                 throw new DukeException("Your tasks are identified by numbers! "
                         + "Please input a valid number.");
@@ -113,13 +125,15 @@ public abstract class Command {
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");
             }
+
             return new MarkCommand(taskNumber);
         case UNMARK:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("Please indicate a task item number to unmark");
             }
+
             try {
-                taskNumber = Integer.parseInt(userInputSplit[1]);
+                taskNumber = Integer.parseInt(inputStrings[1]);
             } catch (NumberFormatException e) {
                 throw new DukeException("Your tasks are identified by numbers! "
                         + "Please input a valid number.");
@@ -127,13 +141,15 @@ public abstract class Command {
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");
             }
+
             return new UnmarkCommand(taskNumber);
         case DELETE:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("Please indicate a task item number to delete");
             }
+
             try {
-                taskNumber = Integer.parseInt(userInputSplit[1]);
+                taskNumber = Integer.parseInt(inputStrings[1]);
             } catch (NumberFormatException e) {
                 throw new DukeException("Your tasks are identified by numbers! "
                         + "Please input a valid number.");
@@ -141,34 +157,40 @@ public abstract class Command {
             if (taskNumber <= 0) {
                 throw new DukeException("Are you trying to be funny?");
             }
+
             return new DeleteCommand(taskNumber);
         case TODO:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("ToDo items must have a description.");
             }
-            return new ToDoCommand(userInputSplit[1]);
+
+            String todoTaskName = inputStrings[1];
+            return new ToDoCommand(todoTaskName);
         case DEADLINE:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("Deadline items must have a description and due date.\n");
             }
-            String[] parsedInput = userInputSplit[1].split(" /by ");
-            if (parsedInput.length != 2) {
+
+            String[] delimitedDeadlineArguments = inputStrings[1].split(" /by ");
+            if (delimitedDeadlineArguments.length != 2) {
                 throw new DukeException("Deadline items must have a description and due date.\n");
             }
-            String taskName = parsedInput[0];
-            String date = parsedInput[1];
-            return new DeadlineCommand(taskName, date);
+
+            String deadlineTaskName = delimitedDeadlineArguments[0];
+            String deadlineDate = delimitedDeadlineArguments[1];
+            return new DeadlineCommand(deadlineTaskName, deadlineDate);
         case EVENT:
-            if (userInputSplit.length == 1) {
+            if (noArgumentsSupplied) {
                 throw new DukeException("Event items must have a description and date.\n");
             }
-            parsedInput = userInputSplit[1].split(" /at ");
-            if (parsedInput.length != 2) {
+
+            String[] delimitedEventArguments = inputStrings[1].split(" /at ");
+            if (delimitedEventArguments.length != 2) {
                 throw new DukeException("Event items must have a description and date.\n");
             }
-            taskName = parsedInput[0];
-            date = parsedInput[1];
-            return new EventCommand(taskName, date);
+            String eventTaskName = delimitedEventArguments[0];
+            String eventDate = delimitedEventArguments[1];
+            return new EventCommand(eventTaskName, eventDate);
         default:
             throw new DukeException("Unknown command.");
         }
