@@ -1,6 +1,7 @@
 package duke.command;
 
 import duke.DukeException;
+import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 import duke.usertask.UserTask;
 
@@ -25,15 +26,16 @@ public class MarkCommand extends Command {
      * <code>execute</code> will return an error, stating that the index does not exist.
      *
      * @param taskList The <code>TaskList</code> of the current user.
+     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
-     * @return
      */
     @Override
-    public String execute(TaskList taskList) throws DukeException {
+    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
         if (index > taskList.getTasksCount()) {
             throw new DukeException("The task you are attempting to mark does not exist");
         }
         UserTask task = taskList.markTask(index);
+        saveHandler.update(task);
         return "Good job! Let's keep it going, this spaceship needs you!\n" + task + "\n";
     }
 }
