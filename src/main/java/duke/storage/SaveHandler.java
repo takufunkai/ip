@@ -1,9 +1,13 @@
 package duke.storage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import duke.DukeException;
@@ -39,9 +43,19 @@ public class SaveHandler {
      */
     public SaveHandler() throws IOException {
         File dir = new File(DATA_DIRECTORY);
-        dir.mkdirs();
+        if (dir.mkdirs()) {
+            System.out.println("Save file directory already exists.");
+        } else {
+            System.out.println("Creating a file directory for save file now.");
+        }
         File f = new File(DATA_FILEPATH);
-        f.createNewFile();
+        if (f.createNewFile()) {
+            System.out.println("Save file already exists.");
+        } else {
+            System.out.println("Creating a save file now.");
+        }
+
+        assert f.exists() : "Data save file does not exist.";
     }
 
     /**
@@ -49,10 +63,10 @@ public class SaveHandler {
      *
      * @param tasks List of tasks to save.
      */
-    public void save(TaskList tasks) {
+    public void saveAndOverwrite(TaskList tasks) {
         try {
             FileWriter fw = new FileWriter(DATA_FILEPATH);
-            fw.append(tasks.toDukeSaveFormat());
+            fw.write(tasks.toDukeSaveFormat());
             fw.close();
         } catch (IOException e) {
             System.out.println("Failed to save data: " + e.getMessage());
@@ -77,6 +91,53 @@ public class SaveHandler {
     }
 
     /**
+     * Removes the item with saveId from the list of saved items in the data file.
+     *
+     * @param task The task to be removed.
+     */
+    public void remove(UserTask task) {
+        String taskSaveFormat = task.toDukeSaveFormat();
+        try {
+            List<String> fileContent = new ArrayList<>(
+                    Files.readAllLines(Path.of(DATA_FILEPATH), StandardCharsets.UTF_8)
+            );
+            for (int i = 0; i < fileContent.size(); i++) {
+                if (fileContent.get(i).equals(taskSaveFormat)) {
+                    fileContent.remove(i);
+                    break;
+                }
+            }
+            Files.write(Path.of(DATA_FILEPATH), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("Unable to remove task: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Updates the item in the list of saved items in the data file.
+     *
+     * @param updatedSave The task after it was updated.
+     */
+    public void update(UserTask updatedSave) {
+        int saveId = Integer.parseInt(updatedSave.toDukeSaveFormat().split("\\|")[0]);
+        try {
+            List<String> fileContent = new ArrayList<>(
+                    Files.readAllLines(Path.of(DATA_FILEPATH), StandardCharsets.UTF_8)
+            );
+            for (int i = 0; i < fileContent.size(); i++) {
+                int currSaveId = Integer.parseInt(fileContent.get(i).split("\\|")[0]);
+                if (currSaveId == saveId) {
+                    fileContent.set(i, updatedSave.toDukeSaveFormat());
+                    break;
+                }
+            }
+            Files.write(Path.of(DATA_FILEPATH), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("Unable to update task: " + e.getMessage());
+        }
+    }
+
+    /**
      * Restores the list of tasks saved on a previous execution of the Duke chat-bot into a <code>TaskList</code>
      * object.
      *
@@ -84,18 +145,22 @@ public class SaveHandler {
      * @throws DukeException Thrown if the restoration failed.
      */
     public void restore(TaskList emptyTasks) throws DukeException {
+        assert emptyTasks.getTasksCount() == 0 : "TaskList given to restore should be empty";
+
         try {
             File saveFile = new File(DATA_FILEPATH);
             Scanner sc = new Scanner(saveFile);
             while (sc.hasNext()) {
                 String savedTask = sc.nextLine();
-                String[] parsedTask = savedTask.split("\\|");
-                TaskCode code = TaskCode.valueOf(parsedTask[0]);
-                if (parsedTask.length < 3) {
+                String[] savedTaskData = savedTask.split("\\|");
+
+                if (savedTaskData.length < 4) {
                     throw new DukeException("Saved item has incorrect format");
                 }
-                String taskName = parsedTask[2];
-                boolean isDone = parsedTask[1].equals("1");
+
+                TaskCode code = TaskCode.valueOf(savedTaskData[1]);
+                boolean isDone = savedTaskData[2].equals("1");
+                String taskName = savedTaskData[3];
 
                 UserTask newTask;
                 try {
@@ -104,10 +169,12 @@ public class SaveHandler {
                         newTask = new ToDo(taskName);
                         break;
                     case D:
-                        newTask = new Deadline(taskName, parsedTask[3]);
+                        String date = savedTaskData[4];
+                        newTask = new Deadline(taskName, date);
                         break;
                     case E:
-                        newTask = new Event(taskName, parsedTask[3]);
+                        date = savedTaskData[4];
+                        newTask = new Event(taskName, date);
                         break;
                     default:
                         throw new DukeException("Unknown task type for saved item.");
@@ -121,6 +188,9 @@ public class SaveHandler {
                 }
                 emptyTasks.addTask(newTask);
             }
+
+            // Clear the existing data file and update it with updated saveId-tasks.
+            saveAndOverwrite(emptyTasks);
         } catch (IOException | DukeException e) {
             System.out.println("Failed to load save-file: " + e.getMessage());
         }

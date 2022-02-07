@@ -1,6 +1,7 @@
 package duke.gui;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import duke.Duke;
 import duke.DukeException;
@@ -28,11 +29,24 @@ public class MainWindow extends AnchorPane {
     private Stage stage;
     private Duke duke;
 
-    private final Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/red_default.png"));
-    private final Image dukeImageError = new Image(this.getClass().getResourceAsStream("/images/red_shocked.png"));
-    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
-    private final Image exitImage = new Image(this.getClass().getResourceAsStream("/images/exit_image.jpg"));
+    private final Image dukeImage = new Image(
+            Objects.requireNonNull(this.getClass().getResourceAsStream("/images/red_default.png"))
+    );
+    private final Image dukeImageError = new Image(
+            Objects.requireNonNull(this.getClass().getResourceAsStream("/images/red_shocked.png"))
+    );
+    private final Image userImage = new Image(
+            Objects.requireNonNull(this.getClass().getResourceAsStream("/images/user.png"))
+    );
+    private final Image exitImage = new Image(
+            Objects.requireNonNull(this.getClass().getResourceAsStream("/images/exit_image.jpg"))
+    );
 
+    /**
+     * MainWindow is the window in which all Duke related GUI will exist and operate.
+     *
+     * @param stage The stage in which all the Duke related GUI will be set from.
+     */
     public MainWindow(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/MainWindow.fxml"));
@@ -66,6 +80,10 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+        if (input.isBlank()) {
+            return;
+        }
+
         try {
             String response = duke.getResponse(input);
             if (response.equals("EXIT")) {
