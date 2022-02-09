@@ -4,6 +4,7 @@ import duke.DukeException;
 import duke.client.Client;
 import duke.client.Gender;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class AddCommand extends ClientCommand {
     private HashMap<String, String> data;
@@ -25,7 +26,7 @@ public class AddCommand extends ClientCommand {
             builder.phoneNumber(data.get("phoneNumber"));
         }
         if (data.get("gender") != null) {
-            builder.gender(Gender.valueOf(data.get("gender")));
+            builder.gender(Gender.valueOf(data.get("gender").toUpperCase(Locale.ROOT)));
         }
         Client client = builder.build();
         super.clients.add(client);
