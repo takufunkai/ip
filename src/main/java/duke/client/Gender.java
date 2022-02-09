@@ -1,5 +1,5 @@
 package duke.client;
 
 public enum Gender {
-    MALE, FEMALE
+    MALE, FEMALE, UNKNOWN
 }

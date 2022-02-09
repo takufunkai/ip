@@ -9,7 +9,7 @@ public class Client {
     private final Gender gender;
     private final String phoneNumber; // TODO: to new class
 
-    public Client(ClientBuilder builder) {
+    private Client(ClientBuilder builder) {
         this.id = UUID.randomUUID().toString();
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
@@ -26,8 +26,8 @@ public class Client {
     public static class ClientBuilder {
         private final String firstName;
         private final String lastName;
-        private Gender gender;
-        private String phoneNumber;
+        private Gender gender = Gender.UNKNOWN;
+        private String phoneNumber = "";
 
         public ClientBuilder(String firstName, String lastName) {
             this.firstName = firstName;

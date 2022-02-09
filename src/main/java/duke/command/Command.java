@@ -4,6 +4,8 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 import duke.DukeException;
+import duke.client.ClientList;
+import duke.command.clientcommand.ClientCommand;
 import duke.command.systemcommand.ByeCommand;
 import duke.command.systemcommand.SystemCommand;
 import duke.command.usertask.UserTaskCommand;
@@ -27,7 +29,7 @@ public abstract class Command {
      * Enums for all possible valid commands that are allowed to be supplied by the user.
      */
     public enum CommandNames {
-        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
+        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE, NEWCLIENT,
     }
 
     private static final EnumSet<CommandNames> userTaskCommand = EnumSet.of(
@@ -36,6 +38,8 @@ public abstract class Command {
     );
 
     private static final EnumSet<CommandNames> systemCommand = EnumSet.of(CommandNames.BYE);
+
+    private static final EnumSet<CommandNames> clientCommand = EnumSet.of(CommandNames.NEWCLIENT);
 
     /**
      * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to
@@ -66,7 +70,8 @@ public abstract class Command {
      * @return A <code>Command</code> object.
      * @throws DukeException Thrown if arguments supplied are invalid.
      */
-    public static Command parse(String input, TaskList tasks, SaveHandler saveHandler) throws DukeException {
+    public static Command parse(
+            String input, TaskList tasks, ClientList clients, SaveHandler saveHandler) throws DukeException {
         assert !input.isBlank() : "Input given should not be blank";
 
         String[] inputStrings = input.split("\\s+", 2);
@@ -79,12 +84,17 @@ public abstract class Command {
             throw new DukeException("I don't know what " + specifiedCommand + " means.");
         }
 
+        String arguments = inputStrings.length == 1 ? null : inputStrings[1];
+
         if (userTaskCommand.contains(command)) {
             return UserTaskCommand
-                    .parse(command, inputStrings.length == 1 ? null : inputStrings[1])
+                    .parse(command, arguments)
                     .supply(saveHandler, tasks);
         } else if (systemCommand.contains(command)) {
             return SystemCommand.parse(command);
+        } else if (clientCommand.contains(command)) {
+            return ClientCommand.parse(command, arguments)
+                    .supply(clients);
         } else {
             return new ByeCommand(); // TODO: Handle edge case where command is valid but doesn't belong anywhere.
         }
