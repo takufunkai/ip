@@ -1,7 +1,6 @@
 package duke.command.usertask;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.TaskList;
 
 /**
@@ -18,7 +17,7 @@ public class FindCommand extends UserTaskCommand {
      *
      * @param search The search query that is to be matched against.
      */
-    public FindCommand(String search) {
+    protected FindCommand(String search) {
         this.search = search;
     }
 

@@ -1,4 +1,4 @@
-package duke.command;
+package duke.command.usertask;
 
 import static duke.utils.Utils.DATE_FORMAT;
 import static duke.utils.Utils.TIME_FORMAT;
@@ -7,18 +7,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import duke.DukeException;
-import duke.command.usertask.DeadlineCommand;
-import duke.command.usertask.DeleteCommand;
-import duke.command.usertask.EventCommand;
-import duke.command.usertask.FindCommand;
-import duke.command.usertask.ListCommand;
-import duke.command.usertask.MarkCommand;
-import duke.command.usertask.ToDoCommand;
-import duke.command.usertask.UnmarkCommand;
+import duke.command.Command;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 import duke.utils.Utils;
 
+/**
+ * UserTaskCommand encapsulates the information required for commands that relate to UserTasks, for example the
+ * TaskList that Duke maintains, and the SaveHandler. It also handles the parsing of a given command to return a proper
+ * executable command.
+ */
 public abstract class UserTaskCommand extends Command {
     protected SaveHandler saveHandler;
     protected TaskList tasks;
@@ -26,14 +24,33 @@ public abstract class UserTaskCommand extends Command {
     protected UserTaskCommand() {
     }
 
+    /**
+     * Supplies to the UserTaskCommand the necessary fields for proper execution. This is necessary, since we want
+     * the Command class to handle the dissemination of necessary data to the correct Command subtype, i.e. this is
+     * to prevent Duke from having to handle the type of command it receives, and then to pass it the correct data
+     * structure.
+     *
+     * @param saveHandler The SaveHandler that Duke uses.
+     * @param tasks The tasks that Duke is maintaining.
+     * @return This UserTaskCommand object.
+     */
     public UserTaskCommand supply(SaveHandler saveHandler, TaskList tasks) {
         this.saveHandler = saveHandler;
         this.tasks = tasks;
         return this;
     }
 
+    /**
+     * Reads a given user command, creates the command object and supplies the arguments to the command object,
+     * then returns it.
+     *
+     * @param command The user given command enum.
+     * @param arguments The arguments that were supplied by the user.
+     * @return The correct executable command object.
+     * @throws DukeException If the argument supplied is invalid.
+     */
     public static UserTaskCommand parse(
-            CommandNames command, String arguments, SaveHandler savehandler, TaskList tasks) throws DukeException {
+            CommandNames command, String arguments) throws DukeException {
         boolean noArgumentsSupplied = arguments == null || arguments.isBlank();
 
         switch (command) {

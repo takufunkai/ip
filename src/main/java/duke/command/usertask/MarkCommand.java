@@ -1,7 +1,6 @@
 package duke.command.usertask;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.UserTask;
 
 /**
@@ -16,7 +15,7 @@ public class MarkCommand extends UserTaskCommand {
      *
      * @param index The index of the task that the user wishes to mark as done.
      */
-    public MarkCommand(int index) {
+    protected MarkCommand(int index) {
         this.index = index;
     }
 

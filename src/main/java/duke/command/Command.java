@@ -4,6 +4,9 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 import duke.DukeException;
+import duke.command.systemcommand.ByeCommand;
+import duke.command.systemcommand.SystemCommand;
+import duke.command.usertask.UserTaskCommand;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 
@@ -44,6 +47,12 @@ public abstract class Command {
         return false;
     }
 
+    /**
+     * Executes the expected behaviour of the class.
+     *
+     * @return The response string of the execution.
+     * @throws DukeException If some argument supplied to the command is invalid.
+     */
     public abstract String execute() throws DukeException;
 
     /**
@@ -72,7 +81,7 @@ public abstract class Command {
 
         if (userTaskCommand.contains(command)) {
             return UserTaskCommand
-                    .parse(command, inputStrings.length == 1 ? null : inputStrings[1], saveHandler, tasks)
+                    .parse(command, inputStrings.length == 1 ? null : inputStrings[1])
                     .supply(saveHandler, tasks);
         } else if (systemCommand.contains(command)) {
             return SystemCommand.parse(command);

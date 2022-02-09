@@ -1,7 +1,6 @@
 package duke.command.usertask;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.UserTask;
 
 /**
@@ -17,7 +16,7 @@ public class DeleteCommand extends UserTaskCommand {
      *
      * @param index The index of the item that the user wants to delete.
      */
-    public DeleteCommand(int index) {
+    protected DeleteCommand(int index) {
         this.index = index;
     }
 

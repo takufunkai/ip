@@ -1,7 +1,6 @@
 package duke.command.usertask;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.Deadline;
 import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
@@ -21,7 +20,7 @@ public class DeadlineCommand extends UserTaskCommand {
      * @param description      The description of the Deadline task.
      * @param deadlineDateTime The due-date for the Deadline task.
      */
-    public DeadlineCommand(String description, String deadlineDateTime) {
+    protected DeadlineCommand(String description, String deadlineDateTime) {
         this.description = description;
         this.deadlineDateTime = deadlineDateTime;
     }

@@ -1,6 +1,5 @@
 package duke.command.usertask;
 
-import duke.command.UserTaskCommand;
 import duke.usertask.ToDo;
 import duke.usertask.UserTask;
 
@@ -17,7 +16,7 @@ public class ToDoCommand extends UserTaskCommand {
      *
      * @param description The description of the ToDo task.
      */
-    public ToDoCommand(String description) {
+    protected ToDoCommand(String description) {
         this.description = description;
     }
 

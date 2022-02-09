@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.TaskList;
 
 /**
@@ -22,7 +21,6 @@ public class ListCommand extends UserTaskCommand {
      * Creates a ListCommand object that has no specified dateFilter.
      */
     public ListCommand() {
-
     }
 
     /**
@@ -30,12 +28,12 @@ public class ListCommand extends UserTaskCommand {
      *
      * @param date The date that tasks should be filtered based on.
      */
-    public ListCommand(LocalDateTime date) {
+    protected ListCommand(LocalDateTime date) {
         this.dateFilter = date;
         this.listMessage = listMessage + "for the date: " + date.toString();
     }
 
-    public void changeListMessage(String message) {
+    protected void changeListMessage(String message) {
         this.listMessage = message;
     }
 

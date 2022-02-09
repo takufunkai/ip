@@ -1,7 +1,6 @@
 package duke.command.usertask;
 
 import duke.DukeException;
-import duke.command.UserTaskCommand;
 import duke.usertask.Event;
 import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
@@ -21,7 +20,7 @@ public class EventCommand extends UserTaskCommand {
      * @param description   The description of the Event.
      * @param eventDateTime The occurrence-date for the Event.
      */
-    public EventCommand(String description, String eventDateTime) {
+    protected EventCommand(String description, String eventDateTime) {
         this.description = description;
         this.eventDateTime = eventDateTime;
     }
