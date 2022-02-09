@@ -1,17 +1,11 @@
 package duke.command;
 
-import static duke.utils.Utils.DATE_FORMAT;
-import static duke.utils.Utils.TIME_FORMAT;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+import java.util.EnumSet;
 import java.util.Locale;
 
 import duke.DukeException;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
-import duke.utils.Utils;
-
 
 /**
  * <code>Command</code> is the abstract base class for all possible commands that <code>Duke</code> recognizes.
@@ -29,19 +23,16 @@ public abstract class Command {
     /**
      * Enums for all possible valid commands that are allowed to be supplied by the user.
      */
-    private enum CommandNames {
+    public enum CommandNames {
         FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE
     }
 
-    /**
-     * Runs the expected behaviour of the specific command. We can assume that command-specific
-     * arguments have been supplied during the instantiation of the <code>Command</code> subclass object.
-     *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler from the Duke application.
-     * @throws DukeException Thrown if some invalid command was given, or the supplied arguments are invalid.
-     */
-    public abstract String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException;
+    private static final EnumSet<CommandNames> userTaskCommand = EnumSet.of(
+            CommandNames.FIND, CommandNames.LIST, CommandNames.DEADLINE, CommandNames.EVENT, CommandNames.DELETE,
+            CommandNames.MARK, CommandNames.UNMARK, CommandNames.TODO
+    );
+
+    private static final EnumSet<CommandNames> systemCommand = EnumSet.of(CommandNames.BYE);
 
     /**
      * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to
@@ -52,6 +43,8 @@ public abstract class Command {
     public boolean isExit() {
         return false;
     }
+
+    public abstract String execute() throws DukeException;
 
     /**
      * Static method that parses the input given by the user.
@@ -64,11 +57,10 @@ public abstract class Command {
      * @return A <code>Command</code> object.
      * @throws DukeException Thrown if arguments supplied are invalid.
      */
-    public static Command parse(String input) throws DukeException {
+    public static Command parse(String input, TaskList tasks, SaveHandler saveHandler) throws DukeException {
         assert !input.isBlank() : "Input given should not be blank";
 
         String[] inputStrings = input.split("\\s+", 2);
-        boolean noArgumentsSupplied = inputStrings.length == 1;
         String specifiedCommand = inputStrings[0];
 
         CommandNames command;
@@ -78,121 +70,14 @@ public abstract class Command {
             throw new DukeException("I don't know what " + specifiedCommand + " means.");
         }
 
-        switch (command) {
-        case BYE:
-            return new ByeCommand();
-        case LIST:
-            if (noArgumentsSupplied || inputStrings[1].isBlank()) {
-                return new ListCommand();
-            }
-
-            String[] listCommandArguments = inputStrings[1].split(" ");
-            if (listCommandArguments.length == 1) {
-                throw new DukeException("Insufficient parameters supplied!");
-            }
-
-            String delimiter = listCommandArguments[0];
-            if (!delimiter.equalsIgnoreCase("/date")) {
-                throw new DukeException("Unknown parameter supplied to list command.");
-            }
-
-            try {
-                LocalDateTime filterDate = Utils.parseToLocalDateTime(listCommandArguments[1]);
-                return new ListCommand(filterDate);
-            } catch (DateTimeParseException e) {
-                throw new DukeException(String.format("Failed to parse date %s. "
-                        + "Please ensure it is of the following format: "
-                        + DATE_FORMAT + " " + TIME_FORMAT, listCommandArguments[1]));
-            }
-        case FIND:
-            if (noArgumentsSupplied || inputStrings[1].isBlank()) {
-                throw new DukeException("Please indicate a valid word to match the task names.");
-            }
-
-            return new FindCommand(inputStrings[1]);
-        case MARK:
-            if (noArgumentsSupplied) {
-                throw new DukeException("Please indicate a task item number to mark");
-            }
-
-            int taskNumber;
-            try {
-                taskNumber = Integer.parseInt(inputStrings[1]);
-            } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! "
-                        + "Please input a valid number.");
-            }
-            if (taskNumber <= 0) {
-                throw new DukeException("Are you trying to be funny?");
-            }
-
-            return new MarkCommand(taskNumber);
-        case UNMARK:
-            if (noArgumentsSupplied) {
-                throw new DukeException("Please indicate a task item number to unmark");
-            }
-
-            try {
-                taskNumber = Integer.parseInt(inputStrings[1]);
-            } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! "
-                        + "Please input a valid number.");
-            }
-            if (taskNumber <= 0) {
-                throw new DukeException("Are you trying to be funny?");
-            }
-
-            return new UnmarkCommand(taskNumber);
-        case DELETE:
-            if (noArgumentsSupplied) {
-                throw new DukeException("Please indicate a task item number to delete");
-            }
-
-            try {
-                taskNumber = Integer.parseInt(inputStrings[1]);
-            } catch (NumberFormatException e) {
-                throw new DukeException("Your tasks are identified by numbers! "
-                        + "Please input a valid number.");
-            }
-            if (taskNumber <= 0) {
-                throw new DukeException("Are you trying to be funny?");
-            }
-
-            return new DeleteCommand(taskNumber);
-        case TODO:
-            if (noArgumentsSupplied) {
-                throw new DukeException("ToDo items must have a description.");
-            }
-
-            String todoTaskName = inputStrings[1];
-            return new ToDoCommand(todoTaskName);
-        case DEADLINE:
-            if (noArgumentsSupplied) {
-                throw new DukeException("Deadline items must have a description and due date.\n");
-            }
-
-            String[] delimitedDeadlineArguments = inputStrings[1].split(" /by ");
-            if (delimitedDeadlineArguments.length != 2) {
-                throw new DukeException("Deadline items must have a description and due date.\n");
-            }
-
-            String deadlineTaskName = delimitedDeadlineArguments[0];
-            String deadlineDate = delimitedDeadlineArguments[1];
-            return new DeadlineCommand(deadlineTaskName, deadlineDate);
-        case EVENT:
-            if (noArgumentsSupplied) {
-                throw new DukeException("Event items must have a description and date.\n");
-            }
-
-            String[] delimitedEventArguments = inputStrings[1].split(" /at ");
-            if (delimitedEventArguments.length != 2) {
-                throw new DukeException("Event items must have a description and date.\n");
-            }
-            String eventTaskName = delimitedEventArguments[0];
-            String eventDate = delimitedEventArguments[1];
-            return new EventCommand(eventTaskName, eventDate);
-        default:
-            throw new DukeException("Unknown command.");
+        if (userTaskCommand.contains(command)) {
+            return UserTaskCommand
+                    .parse(command, inputStrings.length == 1 ? null : inputStrings[1], saveHandler, tasks)
+                    .supply(saveHandler, tasks);
+        } else if (systemCommand.contains(command)) {
+            return SystemCommand.parse(command);
+        } else {
+            return new ByeCommand(); // TODO: Handle edge case where command is valid but doesn't belong anywhere.
         }
     }
 }

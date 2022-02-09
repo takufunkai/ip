@@ -1,9 +1,8 @@
-package duke.command;
+package duke.command.usertask;
 
 import duke.DukeException;
-import duke.storage.SaveHandler;
+import duke.command.UserTaskCommand;
 import duke.usertask.Event;
-import duke.usertask.TaskList;
 import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
 
@@ -12,7 +11,7 @@ import duke.usertask.UserTaskException;
  * and appends it to the existing task list. It receives 2 mandatory arguments, <code>description</code> and
  * <code>eventDateTime</code>, which are required in the creation of an Event task object.
  */
-public class EventCommand extends Command {
+public class EventCommand extends UserTaskCommand {
     private final String description;
     private final String eventDateTime;
 
@@ -31,17 +30,15 @@ public class EventCommand extends Command {
      * Creates a new Event task object, and adds it to the current task list being maintained by <code>Duke</code>.
      * Adds the task to the saveHandler.
      *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if Event object was unsuccessfully created.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
+    public String execute() throws DukeException {
         try {
             UserTask task = new Event(description, eventDateTime);
-            taskList.addTask(task);
+            super.tasks.addTask(task);
             saveHandler.save(task);
-            return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
+            return "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
         } catch (UserTaskException e) {
             throw new DukeException("Failed to create new event item: " + e.getMessage());
         }

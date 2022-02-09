@@ -46,10 +46,10 @@ public class Duke {
      * Replace this stub with your completed method.
      */
     public String getResponse(String input) throws DukeException {
-        Command cmd = Command.parse(input);
+        Command cmd = Command.parse(input, tasks, saveHandler);
         if (cmd.isExit()) {
             return "EXIT";
         }
-        return cmd.execute(this.tasks, this.saveHandler);
+        return cmd.execute();
     }
 }

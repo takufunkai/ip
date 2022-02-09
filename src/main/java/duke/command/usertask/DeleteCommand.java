@@ -1,8 +1,7 @@
-package duke.command;
+package duke.command.usertask;
 
 import duke.DukeException;
-import duke.storage.SaveHandler;
-import duke.usertask.TaskList;
+import duke.command.UserTaskCommand;
 import duke.usertask.UserTask;
 
 /**
@@ -10,7 +9,7 @@ import duke.usertask.UserTask;
  * <code>index</code>, which is the index of the task that the user wants to delete.
  * DeleteCommand will check if the target index exists before attempting to delete.
  */
-public class DeleteCommand extends Command {
+public class DeleteCommand extends UserTaskCommand {
     private final int index;
 
     /**
@@ -28,16 +27,14 @@ public class DeleteCommand extends Command {
      *
      * Removes the item from the list of saved items.
      *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
-        if (index > taskList.getTasksCount()) {
+    public String execute() throws DukeException {
+        if (index > super.tasks.getTasksCount()) {
             throw new DukeException("The task you are attempting to delete does not exist");
         }
-        UserTask delTask = taskList.deleteTask(index);
+        UserTask delTask = super.tasks.deleteTask(index);
         saveHandler.remove(delTask);
         return "Alright! Getting rid of the following task: \n" + delTask + "\n";
     }

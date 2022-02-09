@@ -1,15 +1,14 @@
-package duke.command;
+package duke.command.usertask;
 
 import duke.DukeException;
-import duke.storage.SaveHandler;
-import duke.usertask.TaskList;
+import duke.command.UserTaskCommand;
 import duke.usertask.UserTask;
 
 /**
  * UnmarkCommand handles the marking of some task as not done. It receives a required argument, index, which is the
  * index of the task that the user wishes to mark as undone.
  */
-public class UnmarkCommand extends Command {
+public class UnmarkCommand extends UserTaskCommand {
     private final int index;
 
     /**
@@ -25,16 +24,14 @@ public class UnmarkCommand extends Command {
      * Marks the task from the list of tasks given by <code>Duke</code> as undone. If the index does not yet exist,
      * <code>execute</code> will return an error, stating that the index does not exist.
      *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
-        if (index > taskList.getTasksCount()) {
+    public String execute() throws DukeException {
+        if (index > this.tasks.getTasksCount()) {
             throw new DukeException("The task you are attempting to unmark does not exist");
         }
-        UserTask task = taskList.unmarkTask(index);
+        UserTask task = this.tasks.unmarkTask(index);
         saveHandler.update(task);
         return "I thought you were done with it?\n" + task + "\n";
     }

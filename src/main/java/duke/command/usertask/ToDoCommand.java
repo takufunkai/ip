@@ -1,7 +1,6 @@
-package duke.command;
+package duke.command.usertask;
 
-import duke.storage.SaveHandler;
-import duke.usertask.TaskList;
+import duke.command.UserTaskCommand;
 import duke.usertask.ToDo;
 import duke.usertask.UserTask;
 
@@ -10,7 +9,7 @@ import duke.usertask.UserTask;
  * and appends it to the existing task list. It receives 1 mandatory argument, <code>description</code>,
  * which is required in the creation of a ToDo task object.
  */
-public class ToDoCommand extends Command {
+public class ToDoCommand extends UserTaskCommand {
     private final String description;
 
     /**
@@ -25,15 +24,12 @@ public class ToDoCommand extends Command {
     /**
      * Creates a new ToDo task object, and adds it to the current task list being maintained by <code>Duke</code>.
      * Adds the item to the saveHandler.
-     *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by Duke.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) {
+    public String execute() {
         UserTask task = new ToDo(description);
-        taskList.addTask(task);
+        this.tasks.addTask(task);
         saveHandler.save(task);
-        return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
+        return "Added task #" + (this.tasks.getTasksCount()) + ": " + task + "\n";
     }
 }
