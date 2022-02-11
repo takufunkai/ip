@@ -95,7 +95,7 @@ public class MainWindow extends AnchorPane {
             dialogContainer.getChildren().addAll(
                     DialogBox.getUserDialog(input, userImage),
                     DialogBox.getDukeDialog(response, dukeImage),
-                    AddClientFormBox.getAddClientForm()
+                    AddClientFormBox.getAddClientForm(this::handleAddClient)
             );
         } catch (DukeException e) {
             dialogContainer.getChildren().addAll(
@@ -115,5 +115,9 @@ public class MainWindow extends AnchorPane {
         userInput.setDisable(true);
         sendButton.setText("Exit");
         sendButton.setOnAction(event -> stage.close());
+    }
+
+    private void handleAddClient(String clientData) {
+        System.out.println(clientData);
     }
 }
