@@ -1,7 +1,7 @@
 package duke.gui;
 
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import duke.client.Gender;
 import javafx.fxml.FXML;
@@ -26,9 +26,9 @@ public class AddClientFormBox extends HBox {
     @FXML
     private Label additionalInformation;
 
-    private Consumer<String> addClient;
+    private Function<String, Void> addClientFunction;
 
-    private AddClientFormBox(Consumer<String> addClient) {
+    public AddClientFormBox(Function<String, Void> func) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/AddClientFormBox.fxml"));
             fxmlLoader.setController(this);
@@ -37,19 +37,13 @@ public class AddClientFormBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.addClient = addClient;
-
         genderSelectField.getItems().addAll(Gender.MALE, Gender.FEMALE);
+        this.addClientFunction = func;
     }
 
     @FXML
     public void initialize() {
         additionalInformation.managedProperty().bind(additionalInformation.visibleProperty());
-    }
-
-
-    public static AddClientFormBox getAddClientForm(Consumer<String> addClient) {
-        return new AddClientFormBox(addClient);
     }
 
     @FXML
@@ -70,7 +64,8 @@ public class AddClientFormBox extends HBox {
         if (genderSelectField.getValue() != null) {
             response += String.format(",gender:%s", genderSelectField.getValue().toString());
         }
-        addClient.accept("Success!" + response);
+        System.out.println(response);
+        addClientFunction.apply(response);
     }
 
     private boolean validateInput() {
@@ -86,6 +81,7 @@ public class AddClientFormBox extends HBox {
         additionalInformation.visibleProperty().set(true);
     }
 
+    @FXML
     private void hideAdditionalInformation() {
         additionalInformation.setText("");
         additionalInformation.visibleProperty().set(false);
