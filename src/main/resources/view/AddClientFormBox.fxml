@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<fx:root alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" scaleShape="false" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox spacing="5" style="-fx-background-color: #e0e0e0; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 7, 0, 0, 0); -fx-padding: 5;" >
+            <TextField fx:id="firstNameField" layoutY="558.0" onAction="#handleUserInput" prefHeight="41.0" prefWidth="200.0" />
+            <TextField fx:id="lastNameField" layoutY="558.0" onAction="#handleUserInput" prefHeight="41.0" prefWidth="200.0" />
+            <TextField fx:id="phoneNumberField" layoutY="558.0" onAction="#handleUserInput" prefHeight="41.0" prefWidth="200.0" />
+            <TextField fx:id="genderField" layoutY="558.0" onAction="#handleUserInput" prefHeight="41.0" prefWidth="200.0" />
+        </VBox>
+    </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</fx:root>
