@@ -1,11 +1,10 @@
-package duke.command;
+package duke.command.usertask;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import duke.DukeException;
-import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
 
 /**
@@ -14,7 +13,7 @@ import duke.usertask.TaskList;
  * based on whether they 1. have a <code>dateTime</code> field, and 2. the date of the field is equal to the specified
  * dateFilter supplied by the user. <b>Note:</b> time is irrelevant here, and filter works solely based on date.
  */
-public class ListCommand extends Command {
+public class ListCommand extends UserTaskCommand {
     private LocalDateTime dateFilter = null;
     private String listMessage = "Alright, here are your tasks.";
 
@@ -22,7 +21,6 @@ public class ListCommand extends Command {
      * Creates a ListCommand object that has no specified dateFilter.
      */
     public ListCommand() {
-
     }
 
     /**
@@ -30,12 +28,12 @@ public class ListCommand extends Command {
      *
      * @param date The date that tasks should be filtered based on.
      */
-    public ListCommand(LocalDateTime date) {
+    protected ListCommand(LocalDateTime date) {
         this.dateFilter = date;
         this.listMessage = listMessage + "for the date: " + date.toString();
     }
 
-    public void changeListMessage(String message) {
+    protected void changeListMessage(String message) {
         this.listMessage = message;
     }
 
@@ -44,23 +42,21 @@ public class ListCommand extends Command {
      * are printed out at the top of the table. If this object has some <code>dateFilter</code>, the tasks outputted
      * will be filtered based on the dateFilter supplied.
      *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by Duke.
      * @throws DukeException Thrown if the filter did not succeed.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
+    public String execute() throws DukeException {
         List<String> listItems;
         if (this.dateFilter == null) {
-            listItems = Arrays.asList(taskList.toString().split("\n"));
+            listItems = Arrays.asList(this.tasks.toString().split("\n"));
         } else {
-            TaskList filteredTaskList = taskList.filterByDate(dateFilter);
+            TaskList filteredTaskList = this.tasks.filterByDate(dateFilter);
             listItems = Arrays.asList(filteredTaskList.toString().split("\n"));
         }
         StringBuilder sb = new StringBuilder();
         sb.append(this.listMessage)
                 .append("\n----------\nTOTAL: ")
-                .append(taskList.getTasksCount() == 0 ? "0" : listItems.size())
+                .append(this.tasks.getTasksCount() == 0 ? "0" : listItems.size())
                 .append(" tasks\n----------\n");
         listItems.forEach((item) -> sb.append(item).append("\n"));
         return sb.toString();

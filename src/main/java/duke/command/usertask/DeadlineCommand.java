@@ -1,9 +1,7 @@
-package duke.command;
+package duke.command.usertask;
 
 import duke.DukeException;
-import duke.storage.SaveHandler;
 import duke.usertask.Deadline;
-import duke.usertask.TaskList;
 import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
 
@@ -12,7 +10,7 @@ import duke.usertask.UserTaskException;
  * and appends it to the existing task list. It receives 2 mandatory arguments, <code>description</code> and
  * <code>deadlineDateTime</code>, which are required in the creation of a Deadline task object.
  */
-public class DeadlineCommand extends Command {
+public class DeadlineCommand extends UserTaskCommand {
     private final String description;
     private final String deadlineDateTime;
 
@@ -22,7 +20,7 @@ public class DeadlineCommand extends Command {
      * @param description      The description of the Deadline task.
      * @param deadlineDateTime The due-date for the Deadline task.
      */
-    public DeadlineCommand(String description, String deadlineDateTime) {
+    protected DeadlineCommand(String description, String deadlineDateTime) {
         this.description = description;
         this.deadlineDateTime = deadlineDateTime;
     }
@@ -31,17 +29,15 @@ public class DeadlineCommand extends Command {
      * Creates a new Deadline task object, and adds it to the current task list being maintained by <code>Duke</code>.
      * Adds the task to the SaveHandler.
      *
-     * @param taskList The <code>TaskList</code> of the current user.
-     * @param saveHandler The SaveHandler used by duke.
      * @throws DukeException Thrown if Deadline object was unsuccessfully created.
      */
     @Override
-    public String execute(TaskList taskList, SaveHandler saveHandler) throws DukeException {
+    public String execute() throws DukeException {
         try {
             UserTask task = new Deadline(description, deadlineDateTime);
-            taskList.addTask(task);
+            super.tasks.addTask(task);
             saveHandler.save(task);
-            return "Added task #" + (taskList.getTasksCount()) + ": " + task + "\n";
+            return "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
         } catch (UserTaskException e) {
             throw new DukeException("Failed to create new deadline item: " + e.getMessage());
         }

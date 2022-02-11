@@ -2,6 +2,7 @@ package duke;
 
 import java.io.IOException;
 
+import duke.client.ClientList;
 import duke.command.Command;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
@@ -15,6 +16,7 @@ import duke.usertask.TaskList;
  */
 public class Duke {
     private final TaskList tasks;
+    private final ClientList clients;
     private SaveHandler saveHandler = null;
 
     /**
@@ -28,6 +30,7 @@ public class Duke {
         }
 
         this.tasks = new TaskList(100);
+        this.clients = new ClientList();
         try {
             this.saveHandler.restore(tasks);
         } catch (DukeException e) {
@@ -46,10 +49,10 @@ public class Duke {
      * Replace this stub with your completed method.
      */
     public String getResponse(String input) throws DukeException {
-        Command cmd = Command.parse(input);
+        Command cmd = Command.parse(input, tasks, clients, saveHandler);
         if (cmd.isExit()) {
             return "EXIT";
         }
-        return cmd.execute(this.tasks, this.saveHandler);
+        return cmd.execute();
     }
 }
