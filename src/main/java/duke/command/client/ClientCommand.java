@@ -1,4 +1,4 @@
-package duke.command.clientcommand;
+package duke.command.client;
 
 import java.util.HashMap;
 

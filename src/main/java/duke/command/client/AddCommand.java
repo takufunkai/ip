@@ -1,4 +1,4 @@
-package duke.command.clientcommand;
+package duke.command.client;
 
 import duke.DukeException;
 import duke.client.Client;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class AddCommand extends ClientCommand {
-    private HashMap<String, String> data;
+    private final HashMap<String, String> data;
 
     public AddCommand(HashMap<String, String> data) {
         this.data = data;

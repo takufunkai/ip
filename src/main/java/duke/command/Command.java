@@ -5,9 +5,9 @@ import java.util.Locale;
 
 import duke.DukeException;
 import duke.client.ClientList;
-import duke.command.clientcommand.ClientCommand;
-import duke.command.systemcommand.ByeCommand;
-import duke.command.systemcommand.SystemCommand;
+import duke.command.client.ClientCommand;
+import duke.command.system.ByeCommand;
+import duke.command.system.SystemCommand;
 import duke.command.usertask.UserTaskCommand;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
