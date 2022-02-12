@@ -3,6 +3,7 @@ package duke.gui;
 import java.io.IOException;
 
 import duke.Duke;
+import duke.gui.clients.ClientsWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -47,6 +48,7 @@ public class MainWindow extends AnchorPane {
         this.dukeWindow.setDuke(this.duke);
 
         this.clientsWindow = new ClientsWindow();
+        this.clientsWindow.setDuke(this.duke);
         this.clientsWindow.setVisible(false);
 
         this.getChildren().addAll(this.clientsWindow, this.dukeWindow);

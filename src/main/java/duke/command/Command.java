@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import duke.DukeException;
 import duke.client.ClientList;
-import duke.command.client.ClientCommand;
 import duke.command.system.ByeCommand;
 import duke.command.system.SystemCommand;
 import duke.command.usertask.UserTaskCommand;
@@ -29,7 +28,7 @@ public abstract class Command {
      * Enums for all possible valid commands that are allowed to be supplied by the user.
      */
     public enum CommandNames {
-        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE, NEWCLIENT,
+        FIND, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, BYE,
     }
 
     private static final EnumSet<CommandNames> userTaskCommand = EnumSet.of(
@@ -38,8 +37,6 @@ public abstract class Command {
     );
 
     private static final EnumSet<CommandNames> systemCommand = EnumSet.of(CommandNames.BYE);
-
-    private static final EnumSet<CommandNames> clientCommand = EnumSet.of(CommandNames.NEWCLIENT);
 
     /**
      * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to
@@ -92,9 +89,6 @@ public abstract class Command {
                     .supply(saveHandler, tasks);
         } else if (systemCommand.contains(command)) {
             return SystemCommand.parse(command);
-        } else if (clientCommand.contains(command)) {
-            return ClientCommand.parse(command, arguments)
-                    .supply(clients);
         } else {
             return new ByeCommand(); // TODO: Handle edge case where command is valid but doesn't belong anywhere.
         }

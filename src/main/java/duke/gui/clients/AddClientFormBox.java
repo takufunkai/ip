@@ -1,9 +1,12 @@
-package duke.gui;
+package duke.gui.clients;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import duke.client.Gender;
+import duke.gui.MainWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -26,9 +29,9 @@ public class AddClientFormBox extends HBox {
     @FXML
     private Label additionalInformation;
 
-    private Function<String, Void> addClientFunction;
+    private Function<Map<String, String>, Void> addClientFunction;
 
-    public AddClientFormBox(Function<String, Void> func) {
+    public AddClientFormBox(Function<Map<String, String>, Void> func) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/AddClientFormBox.fxml"));
             fxmlLoader.setController(this);
@@ -37,7 +40,7 @@ public class AddClientFormBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        genderSelectField.getItems().addAll(Gender.MALE, Gender.FEMALE);
+        genderSelectField.getItems().addAll(Gender.UNKNOWN, Gender.MALE, Gender.FEMALE);
         this.addClientFunction = func;
     }
 
@@ -53,19 +56,22 @@ public class AddClientFormBox extends HBox {
             return;
         }
 
-        String response = String.format("firstName:%s", firstNameField.getText());
+        Map<String, String> clientData = new HashMap<>();
 
-        if (!lastNameField.getText().isBlank()) {
-            response += String.format(",lastName:%s", lastNameField.getText());
-        }
-        if (!phoneNumberField.getText().isBlank()) {
-            response += String.format(",phoneNumber:%s", phoneNumberField.getText());
-        }
-        if (genderSelectField.getValue() != null) {
-            response += String.format(",gender:%s", genderSelectField.getValue().toString());
-        }
-        System.out.println(response);
-        addClientFunction.apply(response);
+        clientData.put("firstName", firstNameField.getText());
+        clientData.put("lastName", lastNameField.getText());
+        clientData.put("phoneNumber", phoneNumberField.getText());
+        clientData.put(
+                "gender",
+                genderSelectField.getValue() == null ? Gender.UNKNOWN.name() : genderSelectField.getValue().name()
+        );
+
+        addClientFunction.apply(clientData);
+
+        firstNameField.clear();
+        lastNameField.clear();
+        phoneNumberField.clear();
+        genderSelectField.setValue(Gender.UNKNOWN);
     }
 
     private boolean validateInput() {

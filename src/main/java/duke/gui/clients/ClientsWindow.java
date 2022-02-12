@@ -1,7 +1,11 @@
-package duke.gui;
+package duke.gui.clients;
 
 import java.io.IOException;
+import java.util.Map;
 
+import duke.Duke;
+import duke.client.Client;
+import duke.gui.MainWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,10 +15,11 @@ import javafx.scene.layout.AnchorPane;
 
 public class ClientsWindow extends AnchorPane {
     @FXML
-    private ListView<String> myListView;
+    private ListView<Client> clientListView;
 
     private AddClientFormBox clientForm;
-    private ObservableList<String> data;
+    private ObservableList<Client> clients;
+    private Duke duke;
 
     public ClientsWindow() {
         try {
@@ -25,31 +30,32 @@ public class ClientsWindow extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.clientForm = new AddClientFormBox(this::addClient);
+        this.clientForm = new AddClientFormBox(this::addClientToList);
         this.getChildren().add(this.clientForm);
         this.clientForm.setLayoutY(50);
         this.clientForm.setVisible(false);
-        data = FXCollections.observableArrayList("chocolate", "blue");
-        myListView.setItems(data);
 
-        myListView.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+        clients = FXCollections.observableArrayList();
+
+        clientListView.setItems(clients);
+
+        clientListView.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             System.out.println("New client: " + newValue);
         });
-
     }
 
     @FXML
-    private void initialize() {
-        this.clientForm.managedProperty().bind(this.clientForm.visibleProperty());
-    }
-
-    @FXML
-    public void toggleShowClientForm() {
+    private void toggleShowClientForm() {
         this.clientForm.setVisible(!this.clientForm.visibleProperty().getValue());
     }
 
-    private Void addClient(String message) {
-        data.add(message);
+    public void setDuke(Duke d) {
+        this.duke = d;
+    }
+
+    private Void addClientToList(Map<String, String> clientData) {
+        Client client = this.duke.addClient(clientData);
+        clients.add(client);
         return null;
     }
 }

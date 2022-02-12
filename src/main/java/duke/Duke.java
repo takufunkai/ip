@@ -1,8 +1,11 @@
 package duke;
 
 import java.io.IOException;
+import java.util.Map;
 
+import duke.client.Client;
 import duke.client.ClientList;
+import duke.client.Gender;
 import duke.command.Command;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
@@ -54,5 +57,15 @@ public class Duke {
             return "EXIT";
         }
         return cmd.execute();
+    }
+
+    public Client addClient(Map<String, String> clientData) {
+        Client client = new Client(clientData.get("firstName"));
+
+        client.setLastName(clientData.get("lastName"));
+        client.setPhoneNumber(clientData.get("phoneNumber"));
+        client.setGender(Gender.valueOf(clientData.get("gender")));
+        this.clients.add(client);
+        return client;
     }
 }

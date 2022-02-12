@@ -4,48 +4,53 @@ import java.util.UUID;
 
 public class Client {
     private final String id;
-    private final String firstName;
-    private final String lastName;
-    private final Gender gender;
-    private final String phoneNumber; // TODO: to new class
+    private String firstName;
+    private String lastName;
+    private Gender gender;
+    private String phoneNumber; // TODO: to new class
 
-    private Client(ClientBuilder builder) {
+    public Client(String firstName) {
+        assert !firstName.isBlank() : "A client's first name should not be blank.";
+
         this.id = UUID.randomUUID().toString();
-        this.firstName = builder.firstName;
-        this.lastName = builder.lastName;
-        this.phoneNumber = builder.phoneNumber;
-        this.gender = builder.gender;
+        this.firstName = firstName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Override
     public String toString() {
-        return String.format("ID: %s, Name: %s %s, Gender: %s, Phone Number: %s",
-                this.id, this.lastName, this.firstName, this.gender, this.phoneNumber);
-    }
-
-    public static class ClientBuilder {
-        private final String firstName;
-        private final String lastName;
-        private Gender gender = Gender.UNKNOWN;
-        private String phoneNumber = "";
-
-        public ClientBuilder(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-
-        public ClientBuilder gender(Gender gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public ClientBuilder phoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public Client build() {
-            return new Client(this);
-        }
+        return String.format("Name: %s %s, Gender: %s, Phone Number: %s",
+                this.lastName, this.firstName, this.gender, this.phoneNumber);
     }
 }

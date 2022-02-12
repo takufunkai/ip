@@ -10,6 +10,10 @@ public class ClientList {
         this.clientList = new ArrayList<>();
     }
 
+    public void add(Client client) {
+        this.clientList.add(client);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -17,9 +21,5 @@ public class ClientList {
             sb.append(client).append("\n");
         }
         return sb.toString();
-    }
-
-    public void add(Client client) {
-        this.clientList.add(client);
     }
 }
