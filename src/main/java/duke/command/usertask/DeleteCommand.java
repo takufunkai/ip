@@ -2,6 +2,7 @@ package duke.command.usertask;
 
 import duke.DukeException;
 import duke.usertask.UserTask;
+import duke.utils.DukeResponse;
 
 /**
  * DeleteCommand handles the deletion of the given task at the specified index. It contains the argument
@@ -27,14 +28,16 @@ public class DeleteCommand extends UserTaskCommand {
      * Removes the item from the list of saved items.
      *
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() throws DukeException {
+    public DukeResponse execute() throws DukeException {
         if (index > super.tasks.getTasksCount()) {
             throw new DukeException("The task you are attempting to delete does not exist");
         }
         UserTask delTask = super.tasks.deleteTask(index);
         saveHandler.remove(delTask);
-        return "Alright! Getting rid of the following task: \n" + delTask + "\n";
+        String responseMessage =  "Alright! Getting rid of the following task: \n" + delTask + "\n";
+        return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }
 }

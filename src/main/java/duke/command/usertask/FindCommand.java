@@ -2,6 +2,7 @@ package duke.command.usertask;
 
 import duke.DukeException;
 import duke.usertask.TaskList;
+import duke.utils.DukeResponse;
 
 /**
  * FindCommand handles the necessary arguments for a filter operation on the TaskList, specifically a filter on the
@@ -25,9 +26,10 @@ public class FindCommand extends UserTaskCommand {
      * Searches for and returns items which name matches the {@code search} parameter supplied by the user.
      *
      * @throws DukeException Thrown if the filter did not succeed.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() throws DukeException {
+    public DukeResponse execute() throws DukeException {
         TaskList filteredTaskList = this.tasks.filterByName(this.search);
         ListCommand lc = new ListCommand();
         super.supply(saveHandler, filteredTaskList);

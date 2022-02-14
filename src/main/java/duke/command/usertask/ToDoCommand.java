@@ -2,6 +2,7 @@ package duke.command.usertask;
 
 import duke.usertask.ToDo;
 import duke.usertask.UserTask;
+import duke.utils.DukeResponse;
 
 /**
  * ToDoCommand handles the necessary arguments for the successful creation of a <code>ToDo</code> task object
@@ -23,12 +24,14 @@ public class ToDoCommand extends UserTaskCommand {
     /**
      * Creates a new ToDo task object, and adds it to the current task list being maintained by <code>Duke</code>.
      * Adds the item to the saveHandler.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() {
+    public DukeResponse execute() {
         UserTask task = new ToDo(description);
         this.tasks.addTask(task);
         saveHandler.save(task);
-        return "Added task #" + (this.tasks.getTasksCount()) + ": " + task + "\n";
+        String responseMessage = "Added task #" + (this.tasks.getTasksCount()) + ": " + task + "\n";
+        return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }
 }

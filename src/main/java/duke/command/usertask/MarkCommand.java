@@ -2,6 +2,7 @@ package duke.command.usertask;
 
 import duke.DukeException;
 import duke.usertask.UserTask;
+import duke.utils.DukeResponse;
 
 /**
  * MarkCommand handles the marking of some task as done. It receives a required argument, index, which is the
@@ -24,14 +25,16 @@ public class MarkCommand extends UserTaskCommand {
      * <code>execute</code> will return an error, stating that the index does not exist.
      *
      * @throws DukeException Thrown if the index does not exist, i.e. it exceeds the current size of the TaskList.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() throws DukeException {
+    public DukeResponse execute() throws DukeException {
         if (index > this.tasks.getTasksCount()) {
             throw new DukeException("The task you are attempting to mark does not exist");
         }
         UserTask task = this.tasks.markTask(index);
         saveHandler.update(task);
-        return "Good job! Let's keep it going, this spaceship needs you!\n" + task + "\n";
+        String responseMessage = "Good job! Let's keep it going, this spaceship needs you!\n" + task + "\n";
+        return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }
 }

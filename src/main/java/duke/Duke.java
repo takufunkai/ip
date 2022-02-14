@@ -9,6 +9,7 @@ import duke.client.Gender;
 import duke.command.Command;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
+import duke.utils.DukeResponse;
 
 /**
  * Duke is a chat-bot program that is capable of logging tasks which are (optionally)
@@ -51,14 +52,17 @@ public class Duke {
      * You should have your own function to generate a response to user input.
      * Replace this stub with your completed method.
      */
-    public String getResponse(String input) throws DukeException {
+    public DukeResponse getResponse(String input) throws DukeException {
         Command cmd = Command.parse(input, tasks, clients, saveHandler);
-        if (cmd.isExit()) {
-            return "EXIT";
-        }
         return cmd.execute();
     }
 
+    /**
+     * Adds a client to its list of clients.
+     *
+     * @param clientData A map of the client's key-value data pairs.
+     * @return The created Client object.
+     */
     public Client addClient(Map<String, String> clientData) {
         Client client = new Client(clientData.get("firstName"));
 

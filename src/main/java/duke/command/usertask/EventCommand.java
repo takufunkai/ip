@@ -4,6 +4,7 @@ import duke.DukeException;
 import duke.usertask.Event;
 import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
+import duke.utils.DukeResponse;
 
 /**
  * EventCommand handles the necessary arguments for the successful creation of an <code>Event</code> task object
@@ -30,14 +31,16 @@ public class EventCommand extends UserTaskCommand {
      * Adds the task to the saveHandler.
      *
      * @throws DukeException Thrown if Event object was unsuccessfully created.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() throws DukeException {
+    public DukeResponse execute() throws DukeException {
         try {
             UserTask task = new Event(description, eventDateTime);
             super.tasks.addTask(task);
             saveHandler.save(task);
-            return "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
+            String responseMessage = "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
+            return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
         } catch (UserTaskException e) {
             throw new DukeException("Failed to create new event item: " + e.getMessage());
         }

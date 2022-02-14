@@ -6,6 +6,7 @@ import java.util.List;
 
 import duke.DukeException;
 import duke.usertask.TaskList;
+import duke.utils.DukeResponse;
 
 /**
  * ListCommand handles outputting the entire list of tasks that a user has at the current point in time.
@@ -43,9 +44,10 @@ public class ListCommand extends UserTaskCommand {
      * will be filtered based on the dateFilter supplied.
      *
      * @throws DukeException Thrown if the filter did not succeed.
+     * @return The response of the result of the execution.
      */
     @Override
-    public String execute() throws DukeException {
+    public DukeResponse execute() throws DukeException {
         List<String> listItems;
         if (this.dateFilter == null) {
             listItems = Arrays.asList(this.tasks.toString().split("\n"));
@@ -59,6 +61,6 @@ public class ListCommand extends UserTaskCommand {
                 .append(this.tasks.getTasksCount() == 0 ? "0" : listItems.size())
                 .append(" tasks\n----------\n");
         listItems.forEach((item) -> sb.append(item).append("\n"));
-        return sb.toString();
+        return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, sb.toString());
     }
 }

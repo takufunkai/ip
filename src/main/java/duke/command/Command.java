@@ -10,6 +10,7 @@ import duke.command.system.SystemCommand;
 import duke.command.usertask.UserTaskCommand;
 import duke.storage.SaveHandler;
 import duke.usertask.TaskList;
+import duke.utils.DukeResponse;
 
 /**
  * <code>Command</code> is the abstract base class for all possible commands that <code>Duke</code> recognizes.
@@ -39,22 +40,12 @@ public abstract class Command {
     private static final EnumSet<CommandNames> systemCommand = EnumSet.of(CommandNames.BYE);
 
     /**
-     * Checks if the <code>Command</code> is an <code>ByeCommand</code>. Used by <code>Duke</code> to
-     * determine if execution has been terminated by the user.
-     *
-     * @return true if and only if command is <code>ByeCommand</code>.
-     */
-    public boolean isExit() {
-        return false;
-    }
-
-    /**
      * Executes the expected behaviour of the class.
      *
      * @return The response string of the execution.
      * @throws DukeException If some argument supplied to the command is invalid.
      */
-    public abstract String execute() throws DukeException;
+    public abstract DukeResponse execute() throws DukeException;
 
     /**
      * Static method that parses the input given by the user.
