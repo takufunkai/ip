@@ -13,6 +13,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * The ClientsWindow class is the Controller for the ClientsWindow in the Duke app. It handles the button to open the
+ * add client form, as well as the form itself. It also handles the list of clients that the Duke bot has and displays
+ * it.
+ */
 public class ClientsWindow extends AnchorPane {
     @FXML
     private ListView<Client> clientListView;
@@ -21,6 +26,11 @@ public class ClientsWindow extends AnchorPane {
     private ObservableList<Client> clients;
     private Duke duke;
 
+    /**
+     * Creates an instance of the controller. Apart from setting up the stylistic logic of the window, this
+     * constructor also sets up the data structure containing the list of clients and attaches a listener between it
+     * and the ListView object.
+     */
     public ClientsWindow() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/ClientsWindow.fxml"));

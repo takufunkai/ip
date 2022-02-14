@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import duke.Duke;
 import duke.DukeException;
+import duke.utils.DukeResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -80,8 +81,8 @@ public class DukeWindow extends AnchorPane {
         }
 
         try {
-            String response = duke.getResponse(input);
-            if (response.equals("EXIT")) {
+            DukeResponse response = duke.getResponse(input);
+            if (response.getStatus() == DukeResponse.ResponseStatus.EXIT) {
                 handleExit();
                 userInput.clear();
                 return;
@@ -89,7 +90,7 @@ public class DukeWindow extends AnchorPane {
 
             dialogContainer.getChildren().addAll(
                     DialogBox.getUserDialog(input, userImage),
-                    DialogBox.getDukeDialog(response, dukeImage)
+                    DialogBox.getDukeDialog(response.getMessage(), dukeImage)
             );
         } catch (DukeException e) {
             dialogContainer.getChildren().addAll(
@@ -109,9 +110,5 @@ public class DukeWindow extends AnchorPane {
         userInput.setDisable(true);
         sendButton.setText("Exit");
         sendButton.setOnAction(event -> System.exit(0));
-    }
-
-    private void handleAddClient(String clientData) {
-        System.out.println(clientData);
     }
 }

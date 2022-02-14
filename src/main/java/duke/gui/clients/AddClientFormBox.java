@@ -15,6 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
+/**
+ * Controller for the AddClientFormBox fxml component. It handles all the fields, buttons and labels associated with
+ * the form box. The form box is not meant to be used as a stand-alone page, but as a component that can be reused
+ * wherever necessary.
+ */
 public class AddClientFormBox extends HBox {
     @FXML
     private TextField firstNameField;
@@ -31,6 +36,12 @@ public class AddClientFormBox extends HBox {
 
     private Function<Map<String, String>, Void> addClientFunction;
 
+    /**
+     * Creates a new instance of the AddClientFormBox controller.
+     *
+     * @param func A function that accepts a Mapping between the data field names and the value of the associated data,
+     *             then creates a client using the given mapping.
+     */
     public AddClientFormBox(Function<Map<String, String>, Void> func) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/AddClientFormBox.fxml"));
@@ -45,7 +56,7 @@ public class AddClientFormBox extends HBox {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         additionalInformation.managedProperty().bind(additionalInformation.visibleProperty());
     }
 

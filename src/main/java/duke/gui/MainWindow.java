@@ -12,6 +12,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Class MainWindow is the controller for the MainWindow fxml component. It is responsible for handling the menu bar
+ * and is the highest in the hierarchy of nodes.
+ */
 public class MainWindow extends AnchorPane {
     @FXML
     private MenuBar menuBar;
@@ -60,11 +64,17 @@ public class MainWindow extends AnchorPane {
         duke = d;
     }
 
+    /**
+     * Changes the existing window to the clientsWindow view.
+     */
     public void openClientsWindow() {
         this.clientsWindow.setVisible(true);
         this.dukeWindow.setVisible(false);
     }
 
+    /**
+     * Changes the existing window to the clientsWindow view.
+     */
     public void openDukeWindow() {
         this.dukeWindow.setVisible(true);
         this.clientsWindow.setVisible(false);
