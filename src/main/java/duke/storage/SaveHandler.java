@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -80,11 +81,13 @@ public class SaveHandler {
      */
     public void save(DukeSavable ...tasks) {
         try {
-            FileWriter fw = new FileWriter(DATA_FILEPATH);
             for (DukeSavable t : tasks) {
-                fw.append(t.toDukeSaveFormat());
+                Files.write(
+                        Path.of(DATA_FILEPATH),
+                        t.toDukeSaveFormat().getBytes(StandardCharsets.UTF_8),
+                        StandardOpenOption.APPEND
+                );
             }
-            fw.close();
         } catch (IOException e) {
             System.out.println("Failed to save data: " + e.getMessage());
         }
