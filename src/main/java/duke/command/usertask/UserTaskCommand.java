@@ -8,17 +8,17 @@ import java.time.format.DateTimeParseException;
 
 import duke.DukeException;
 import duke.command.Command;
-import duke.storage.SaveHandler;
+import duke.storage.TasksStorage;
 import duke.usertask.TaskList;
 import duke.utils.Utils;
 
 /**
  * UserTaskCommand encapsulates the information required for commands that relate to UserTasks, for example the
- * TaskList that Duke maintains, and the SaveHandler. It also handles the parsing of a given command to return a proper
+ * TaskList that Duke maintains, and the TasksStorage. It also handles the parsing of a given command to return a proper
  * executable command.
  */
 public abstract class UserTaskCommand extends Command {
-    protected SaveHandler saveHandler;
+    protected TasksStorage tasksStorage;
     protected TaskList tasks;
 
     protected UserTaskCommand() {
@@ -30,12 +30,12 @@ public abstract class UserTaskCommand extends Command {
      * to prevent Duke from having to handle the type of command it receives, and then to pass it the correct data
      * structure.
      *
-     * @param saveHandler The SaveHandler that Duke uses.
+     * @param tasksStorage The TasksStorage that Duke uses.
      * @param tasks The tasks that Duke is maintaining.
      * @return This UserTaskCommand object.
      */
-    public UserTaskCommand supply(SaveHandler saveHandler, TaskList tasks) {
-        this.saveHandler = saveHandler;
+    public UserTaskCommand supply(TasksStorage tasksStorage, TaskList tasks) {
+        this.tasksStorage = tasksStorage;
         this.tasks = tasks;
         return this;
     }

@@ -36,7 +36,7 @@ public class DeleteCommand extends UserTaskCommand {
             throw new DukeException("The task you are attempting to delete does not exist");
         }
         UserTask delTask = super.tasks.deleteTask(index);
-        saveHandler.remove(delTask);
+        tasksStorage.remove(delTask);
         String responseMessage =  "Alright! Getting rid of the following task: \n" + delTask + "\n";
         return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }

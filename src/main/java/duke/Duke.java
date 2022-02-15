@@ -7,7 +7,7 @@ import duke.client.Client;
 import duke.client.ClientList;
 import duke.client.Gender;
 import duke.command.Command;
-import duke.storage.SaveHandler;
+import duke.storage.TasksStorage;
 import duke.usertask.TaskList;
 import duke.utils.DukeResponse;
 
@@ -21,14 +21,14 @@ import duke.utils.DukeResponse;
 public class Duke {
     private final TaskList tasks;
     private final ClientList clients;
-    private SaveHandler saveHandler = null;
+    private TasksStorage tasksStorage = null;
 
     /**
      * Creates a new Duke chat-bot instance.
      */
     public Duke() {
         try {
-            this.saveHandler = new SaveHandler();
+            this.tasksStorage = new TasksStorage();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -36,7 +36,7 @@ public class Duke {
         this.tasks = new TaskList(100);
         this.clients = new ClientList();
         try {
-            this.saveHandler.restore(tasks);
+            this.tasksStorage.restore(tasks);
         } catch (DukeException e) {
             System.out.println("Failed to restore saved tasks: " + e.getMessage());
         }
@@ -53,7 +53,7 @@ public class Duke {
      * Replace this stub with your completed method.
      */
     public DukeResponse getResponse(String input) throws DukeException {
-        Command cmd = Command.parse(input, tasks, clients, saveHandler);
+        Command cmd = Command.parse(input, tasks, clients, tasksStorage);
         return cmd.execute();
     }
 

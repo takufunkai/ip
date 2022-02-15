@@ -28,7 +28,7 @@ public class DeadlineCommand extends UserTaskCommand {
 
     /**
      * Creates a new Deadline task object, and adds it to the current task list being maintained by <code>Duke</code>.
-     * Adds the task to the SaveHandler.
+     * Adds the task to the TasksStorage.
      *
      * @throws DukeException Thrown if Deadline object was unsuccessfully created.
      * @return The response of the result of the execution.
@@ -38,7 +38,7 @@ public class DeadlineCommand extends UserTaskCommand {
         try {
             UserTask task = new Deadline(description, deadlineDateTime);
             super.tasks.addTask(task);
-            saveHandler.save(task);
+            tasksStorage.save(task);
             String responseMessage = "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
             return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
         } catch (UserTaskException e) {

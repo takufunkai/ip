@@ -32,7 +32,7 @@ public class FindCommand extends UserTaskCommand {
     public DukeResponse execute() throws DukeException {
         TaskList filteredTaskList = this.tasks.filterByName(this.search);
         ListCommand lc = new ListCommand();
-        super.supply(saveHandler, filteredTaskList);
+        super.supply(tasksStorage, filteredTaskList);
         lc.changeListMessage("Alright, here are your matching tasks: ");
         return lc.execute();
     }

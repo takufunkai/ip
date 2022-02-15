@@ -33,7 +33,7 @@ public class UnmarkCommand extends UserTaskCommand {
             throw new DukeException("The task you are attempting to unmark does not exist");
         }
         UserTask task = this.tasks.unmarkTask(index);
-        saveHandler.update(task);
+        tasksStorage.update(task);
         String responseMessage = "I thought you were done with it?\n" + task + "\n";
         return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }

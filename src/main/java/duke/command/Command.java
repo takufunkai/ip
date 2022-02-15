@@ -8,7 +8,7 @@ import duke.client.ClientList;
 import duke.command.system.ByeCommand;
 import duke.command.system.SystemCommand;
 import duke.command.usertask.UserTaskCommand;
-import duke.storage.SaveHandler;
+import duke.storage.TasksStorage;
 import duke.usertask.TaskList;
 import duke.utils.DukeResponse;
 
@@ -59,7 +59,7 @@ public abstract class Command {
      * @throws DukeException Thrown if arguments supplied are invalid.
      */
     public static Command parse(
-            String input, TaskList tasks, ClientList clients, SaveHandler saveHandler) throws DukeException {
+            String input, TaskList tasks, ClientList clients, TasksStorage tasksStorage) throws DukeException {
         assert !input.isBlank() : "Input given should not be blank";
 
         String[] inputStrings = input.split("\\s+", 2);
@@ -77,7 +77,7 @@ public abstract class Command {
         if (userTaskCommand.contains(command)) {
             return UserTaskCommand
                     .parse(command, arguments)
-                    .supply(saveHandler, tasks);
+                    .supply(tasksStorage, tasks);
         } else if (systemCommand.contains(command)) {
             return SystemCommand.parse(command);
         } else {

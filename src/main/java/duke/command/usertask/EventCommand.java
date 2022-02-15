@@ -28,7 +28,7 @@ public class EventCommand extends UserTaskCommand {
 
     /**
      * Creates a new Event task object, and adds it to the current task list being maintained by <code>Duke</code>.
-     * Adds the task to the saveHandler.
+     * Adds the task to the tasksStorage.
      *
      * @throws DukeException Thrown if Event object was unsuccessfully created.
      * @return The response of the result of the execution.
@@ -38,7 +38,7 @@ public class EventCommand extends UserTaskCommand {
         try {
             UserTask task = new Event(description, eventDateTime);
             super.tasks.addTask(task);
-            saveHandler.save(task);
+            tasksStorage.save(task);
             String responseMessage = "Added task #" + (super.tasks.getTasksCount()) + ": " + task + "\n";
             return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
         } catch (UserTaskException e) {

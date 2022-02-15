@@ -23,14 +23,14 @@ public class ToDoCommand extends UserTaskCommand {
 
     /**
      * Creates a new ToDo task object, and adds it to the current task list being maintained by <code>Duke</code>.
-     * Adds the item to the saveHandler.
+     * Adds the item to the tasksStorage.
      * @return The response of the result of the execution.
      */
     @Override
     public DukeResponse execute() {
         UserTask task = new ToDo(description);
         this.tasks.addTask(task);
-        saveHandler.save(task);
+        tasksStorage.save(task);
         String responseMessage = "Added task #" + (this.tasks.getTasksCount()) + ": " + task + "\n";
         return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }

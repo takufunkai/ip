@@ -21,12 +21,12 @@ import duke.usertask.UserTask;
 import duke.usertask.UserTaskException;
 
 /**
- * SaveHandler is the class that handles all storage-related information and methods of the Duke chat-bot.
- * A SaveHandler object encapsulates the necessary information for storing and restoring of the user's saved tasks.
+ * TasksStorage is the class that handles all storage-related information and methods of the Duke chat-bot.
+ * A TasksStorage object encapsulates the necessary information for storing and restoring of the user's saved tasks.
  * This includes the directory which is being used as the storage, and some Enums being used to parse
  * the saved strings.
  */
-public class SaveHandler {
+public class TasksStorage implements Storage {
     private static final String DATA_DIRECTORY = "data";
     private static final String DATA_FILEPATH = DATA_DIRECTORY + "/duke.txt";
 
@@ -35,14 +35,14 @@ public class SaveHandler {
     }
 
     /**
-     * Creates a new SaveHandler object which is able to save and restore tasks to a pre-defined location.
-     * SaveHandler attempts to create the necessary directories and files without explicitly checking if they
+     * Creates a new TasksStorage object which is able to save and restore tasks to a pre-defined location.
+     * TasksStorage attempts to create the necessary directories and files without explicitly checking if they
      * already exist. Since creating existing directories and files only fails silently, there is no explicit checks
      * done.
      *
      * @throws IOException Thrown if the creation/opening of the files and directories failed.
      */
-    public SaveHandler() throws IOException {
+    public TasksStorage() throws IOException {
         File dir = new File(DATA_DIRECTORY);
         if (dir.mkdirs()) {
             System.out.println("Save file directory already exists.");
@@ -79,6 +79,7 @@ public class SaveHandler {
      *
      * @param tasks List of tasks to save.
      */
+    @Override
     public void save(DukeSavable ...tasks) {
         try {
             for (DukeSavable t : tasks) {

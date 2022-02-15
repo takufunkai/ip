@@ -33,7 +33,7 @@ public class MarkCommand extends UserTaskCommand {
             throw new DukeException("The task you are attempting to mark does not exist");
         }
         UserTask task = this.tasks.markTask(index);
-        saveHandler.update(task);
+        tasksStorage.update(task);
         String responseMessage = "Good job! Let's keep it going, this spaceship needs you!\n" + task + "\n";
         return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }
