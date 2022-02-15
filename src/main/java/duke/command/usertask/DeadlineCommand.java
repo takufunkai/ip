@@ -21,7 +21,7 @@ public class DeadlineCommand extends UserTaskCommand {
      * @param description      The description of the Deadline task.
      * @param deadlineDateTime The due-date for the Deadline task.
      */
-    protected DeadlineCommand(String description, String deadlineDateTime) {
+    public DeadlineCommand(String description, String deadlineDateTime) {
         this.description = description;
         this.deadlineDateTime = deadlineDateTime;
     }

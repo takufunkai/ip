@@ -6,6 +6,15 @@ import duke.usertask.DukeSavable;
 import duke.usertask.TaskList;
 
 public class TasksStorageStub implements Storage {
+    private static final TasksStorageStub STORAGE_STUB = new TasksStorageStub();
+
+    private TasksStorageStub() {
+    }
+
+    public static TasksStorageStub getStub() {
+        return TasksStorageStub.STORAGE_STUB;
+    }
+
     @Override
     public void save(DukeSavable... tasks) {
     }

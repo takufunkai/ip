@@ -12,7 +12,7 @@ import duke.utils.DukeResponse;
 public class ToDoCommandTest {
     @Test
     void execute() throws DukeException {
-        TasksStorageStub storageStub = new TasksStorageStub();
+        TasksStorageStub storageStub = TasksStorageStub.getStub();
         TaskList tasks = new TaskList(1);
 
         String description = "Test 1";

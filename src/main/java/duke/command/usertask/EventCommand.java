@@ -21,7 +21,7 @@ public class EventCommand extends UserTaskCommand {
      * @param description   The description of the Event.
      * @param eventDateTime The occurrence-date for the Event.
      */
-    protected EventCommand(String description, String eventDateTime) {
+    public EventCommand(String description, String eventDateTime) {
         this.description = description;
         this.eventDateTime = eventDateTime;
     }
