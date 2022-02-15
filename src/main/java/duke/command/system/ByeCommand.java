@@ -12,4 +12,15 @@ public class ByeCommand extends SystemCommand {
     public DukeResponse execute() throws DukeException {
         return new DukeResponse(DukeResponse.ResponseStatus.EXIT);
     }
+
+    /**
+     * Checks if the other object is a ByeCommand.
+     *
+     * @param other The other object to be checked against.
+     * @return True if the other object is a ByeCommand.
+     */
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof ByeCommand;
+    }
 }

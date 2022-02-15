@@ -17,7 +17,7 @@ public class ToDoCommand extends UserTaskCommand {
      *
      * @param description The description of the ToDo task.
      */
-    protected ToDoCommand(String description) {
+    public ToDoCommand(String description) {
         this.description = description;
     }
 

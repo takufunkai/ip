@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 
 import duke.DukeException;
 import duke.command.Command;
+import duke.storage.Storage;
 import duke.storage.TasksStorage;
 import duke.usertask.TaskList;
 import duke.utils.Utils;
@@ -18,7 +19,7 @@ import duke.utils.Utils;
  * executable command.
  */
 public abstract class UserTaskCommand extends Command {
-    protected TasksStorage tasksStorage;
+    protected Storage tasksStorage;
     protected TaskList tasks;
 
     protected UserTaskCommand() {
@@ -34,7 +35,7 @@ public abstract class UserTaskCommand extends Command {
      * @param tasks The tasks that Duke is maintaining.
      * @return This UserTaskCommand object.
      */
-    public UserTaskCommand supply(TasksStorage tasksStorage, TaskList tasks) {
+    public UserTaskCommand supply(Storage tasksStorage, TaskList tasks) {
         this.tasksStorage = tasksStorage;
         this.tasks = tasks;
         return this;

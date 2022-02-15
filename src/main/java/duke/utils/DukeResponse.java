@@ -40,4 +40,24 @@ public class DukeResponse {
     public String getMessage() {
         return this.message;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof DukeResponse)) {
+            return false;
+        }
+
+        DukeResponse otherResponse = (DukeResponse) other;
+        boolean isSameStatus = this.status.equals(otherResponse.status);
+        boolean isSameMessage = this.message.equals(otherResponse.message);
+        return isSameStatus && isSameMessage;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Status: %s, Message: %s", this.status, this.message);
+    }
 }

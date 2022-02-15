@@ -64,6 +64,7 @@ public class TasksStorage implements Storage {
      *
      * @param tasks List of tasks to save.
      */
+    @Override
     public void saveAndOverwrite(TaskList tasks) {
         try {
             FileWriter fw = new FileWriter(DATA_FILEPATH);
@@ -99,7 +100,8 @@ public class TasksStorage implements Storage {
      *
      * @param task The task to be removed.
      */
-    public void remove(UserTask task) {
+    @Override
+    public void remove(DukeSavable task) {
         String taskSaveFormat = task.toDukeSaveFormat();
         try {
             List<String> fileContent = new ArrayList<>(
@@ -122,7 +124,8 @@ public class TasksStorage implements Storage {
      *
      * @param updatedSave The task after it was updated.
      */
-    public void update(UserTask updatedSave) {
+    @Override
+    public void update(DukeSavable updatedSave) {
         int saveId = Integer.parseInt(updatedSave.toDukeSaveFormat().split("\\|")[0]);
         try {
             List<String> fileContent = new ArrayList<>(
@@ -148,6 +151,7 @@ public class TasksStorage implements Storage {
      * @param emptyTasks The <code>TaskList</code> object being maintained by Duke.
      * @throws DukeException Thrown if the restoration failed.
      */
+    @Override
     public void restore(TaskList emptyTasks) throws DukeException {
         assert emptyTasks.getTasksCount() == 0 : "TaskList given to restore should be empty";
 
