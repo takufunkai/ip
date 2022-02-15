@@ -18,6 +18,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         MainWindow mw = new MainWindow();
         Scene scene = new Scene(mw);
+        scene.getStylesheets().add(getClass().getResource("/view/DukeWindow.css").toExternalForm());
         stage.setScene(scene);
         mw.setDuke(duke);
         stage.show();

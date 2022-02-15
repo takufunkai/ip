@@ -1,0 +1,5 @@
+.scroll-pane .viewport {
+    -fx-background-image: url("../images/communications_room.png");
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
