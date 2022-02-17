@@ -1,0 +1,10 @@
+.user-dialog-box {
+    -fx-label-padding: 5 20;
+    -fx-background-color: #e0e0e0;
+    -fx-background-insets: 5;
+    -fx-background-radius: 20;
+    -fx-border-width: 1;
+    -fx-border-color: #aaa;
+    -fx-border-radius: 20;
+    -fx-border-insets: 5;
+}

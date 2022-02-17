@@ -1,7 +1,10 @@
 package duke.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,6 +62,21 @@ public class DialogBox extends HBox {
     public static DialogBox getDukeDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+        String styles = db.dialog.getStyle();
+        String stylesWithRedBackgroundColor = DialogBox.modifyStyleValue(
+                styles, "-fx-background-color", "#fecccc"
+        );
+        db.dialog.setStyle(stylesWithRedBackgroundColor);
         return db;
+    }
+
+    private static String modifyStyleValue(String styles, String key, String value) {
+        Map<String, String> stylesMap = Arrays.stream(styles.split(";"))
+                .map(string -> string.trim().split(": "))
+                .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+        stylesMap.put(key, value);
+        return stylesMap.keySet().stream()
+                .map(k -> String.format("%s: %s;", k, stylesMap.get(k)))
+                .collect(Collectors.joining(" "));
     }
 }

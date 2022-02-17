@@ -8,19 +8,12 @@ import duke.DukeException;
 import duke.utils.DukeResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 
 public class DukeWindow extends AnchorPane {
@@ -60,18 +53,6 @@ public class DukeWindow extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        Image backgroundImage = new Image(
-//                Objects.requireNonNull(this.getClass().getResourceAsStream("/images/communications_room.png"))
-//        );
-//        BackgroundImage bgImage = new BackgroundImage(
-//                backgroundImage,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundRepeat.NO_REPEAT,
-//                new BackgroundPosition(Side.LEFT, 0, false, Side.BOTTOM, 0, false),
-//                new BackgroundSize(100, 100, true, true, true, false)
-//        );
-//        this.dialogContainer.setBackground(new Background());
-//        this.scrollPane.setBackground(new Background(bgImage));
     }
 
     @FXML
