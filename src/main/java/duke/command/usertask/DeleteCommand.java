@@ -37,7 +37,7 @@ public class DeleteCommand extends UserTaskCommand {
         }
         UserTask delTask = super.tasks.deleteTask(index);
         tasksStorage.remove(delTask);
-        String responseMessage =  "Alright! Getting rid of the following task: \n" + delTask + "\n";
+        String responseMessage = "Alright! Getting rid of the following task: \n" + delTask + "\n";
         return new DukeResponse(DukeResponse.ResponseStatus.SUCCESS, responseMessage);
     }
 }
