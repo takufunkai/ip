@@ -6,7 +6,6 @@ import duke.Duke;
 import duke.gui.clients.ClientsWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,12 +27,11 @@ public class MainWindow extends AnchorPane {
 
     private Duke duke;
 
-    private DukeWindow dukeWindow;
-    private ClientsWindow clientsWindow;
-    private Node currentChildWindow;
+    private final DukeWindow dukeWindow;
+    private final ClientsWindow clientsWindow;
 
     /**
-     * MainWindow is the window in which all Duke related GUI will exist and operate.
+     * Returns an instance of the MainWindow controller.
      */
     public MainWindow() {
         try {

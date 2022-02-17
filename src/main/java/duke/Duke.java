@@ -49,8 +49,11 @@ public class Duke {
     }
 
     /**
-     * You should have your own function to generate a response to user input.
-     * Replace this stub with your completed method.
+     * Returns a response based on the given user input.
+     *
+     * @param input The input supplied by the user.
+     * @return An appropriate DukeResponse for the given input.
+     * @throws DukeException If the given input is invalid.
      */
     public DukeResponse getResponse(String input) throws DukeException {
         Command cmd = Command.parse(input, tasks, clients, tasksStorage);
