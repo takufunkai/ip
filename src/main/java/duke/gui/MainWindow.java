@@ -42,15 +42,12 @@ public class MainWindow extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.duke = new Duke();
         dukeMenuItem.setOnAction(e -> openDukeWindow());
         clientsMenuItem.setOnAction(e -> openClientsWindow());
 
         this.dukeWindow = new DukeWindow();
-        this.dukeWindow.setDuke(this.duke);
 
         this.clientsWindow = new ClientsWindow();
-        this.clientsWindow.setDuke(this.duke);
         this.clientsWindow.setVisible(false);
 
         this.getChildren().addAll(this.clientsWindow, this.dukeWindow);
@@ -59,7 +56,9 @@ public class MainWindow extends AnchorPane {
     }
 
     public void setDuke(Duke d) {
-        duke = d;
+        this.duke = d;
+        this.dukeWindow.setDuke(d);
+        this.clientsWindow.setDuke(d);
     }
 
     /**
