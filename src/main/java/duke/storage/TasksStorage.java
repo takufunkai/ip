@@ -45,15 +45,15 @@ public class TasksStorage implements Storage {
     public TasksStorage() throws IOException {
         File dir = new File(DATA_DIRECTORY);
         if (dir.mkdirs()) {
-            System.out.println("Save file directory already exists.");
+            System.out.println("Creating a file directory for save file now: " + DATA_DIRECTORY);
         } else {
-            System.out.println("Creating a file directory for save file now.");
+            System.out.println("Save file directory already exists: " + DATA_DIRECTORY);
         }
         File f = new File(DATA_FILEPATH);
         if (f.createNewFile()) {
-            System.out.println("Save file already exists.");
+            System.out.println("Creating a save file now: " + DATA_FILEPATH);
         } else {
-            System.out.println("Creating a save file now.");
+            System.out.println("Save file already exists: " + DATA_FILEPATH);
         }
 
         assert f.exists() : "Data save file does not exist.";
@@ -84,10 +84,9 @@ public class TasksStorage implements Storage {
     public void save(DukeSavable ...tasks) {
         try {
             for (DukeSavable t : tasks) {
+                String saveValue = t.toDukeSaveFormat() + "\n";
                 Files.write(
-                        Path.of(DATA_FILEPATH),
-                        t.toDukeSaveFormat().getBytes(StandardCharsets.UTF_8),
-                        StandardOpenOption.APPEND
+                        Path.of(DATA_FILEPATH), saveValue.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND
                 );
             }
         } catch (IOException e) {
@@ -132,10 +131,15 @@ public class TasksStorage implements Storage {
                     Files.readAllLines(Path.of(DATA_FILEPATH), StandardCharsets.UTF_8)
             );
             for (int i = 0; i < fileContent.size(); i++) {
-                int currSaveId = Integer.parseInt(fileContent.get(i).split("\\|")[0]);
-                if (currSaveId == saveId) {
-                    fileContent.set(i, updatedSave.toDukeSaveFormat());
-                    break;
+                try {
+                    int currSaveId = Integer.parseInt(fileContent.get(i).split("\\|")[0]);
+                    if (currSaveId == saveId) {
+                        fileContent.set(i, updatedSave.toDukeSaveFormat());
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Failed to parse: " + fileContent.get(i).split("\\|")[0]);
+                    System.out.println(e.getMessage());
                 }
             }
             Files.write(Path.of(DATA_FILEPATH), fileContent, StandardCharsets.UTF_8);
